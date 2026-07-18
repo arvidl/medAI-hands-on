@@ -1,0 +1,58 @@
+# Conda environment for medAI-hands-on
+#
+# Create:  conda env create -f environment.yml
+# Update:  conda env update -f environment.yml --prune
+# Activate: conda activate medai-handson
+#
+# Apple Silicon (M1/M2/M3/M4):
+#   Keep this file as-is (conda-forge pytorch uses MPS).
+#
+# NVIDIA GPU (CUDA):
+#   After creating the env, install a CUDA-enabled PyTorch build, e.g.:
+#     conda activate medai-handson
+#     conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
+#   Or follow https://pytorch.org/get-started/locally/
+
+name: medai-handson
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - python=3.11
+  - pip
+
+  # Scientific stack
+  - numpy>=1.24
+  - scipy>=1.10
+  - pandas>=2.0
+  - matplotlib>=3.7
+  - seaborn>=0.13
+  - scikit-learn>=1.3
+  - networkx>=3.0
+  - tqdm>=4.66
+
+  # Deep learning (CPU / MPS via conda-forge; see header for CUDA)
+  - pytorch>=2.0
+  - torchvision
+
+  # Medical imaging
+  - nibabel>=5.0
+  - monai>=1.3
+
+  # Notebooks
+  - jupyter
+  - ipykernel
+  - ipywidgets
+
+  # Packages more reliably installed via pip
+  - pip:
+      - python-louvain>=0.16
+      - lifelines>=0.27
+      - transformers>=4.35
+      - accelerate>=0.25
+      - sentencepiece>=0.1.99
+      - huggingface-hub>=0.20
+      - chromadb>=0.4
+      - sentence-transformers>=2.2
+      # Install local package in editable mode (provides `import src`)
+      - -e .

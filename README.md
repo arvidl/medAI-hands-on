@@ -38,35 +38,92 @@ Click the badge below to open the notebooks directly in Google Colab:
 
 ### Option 2: Local Installation
 
-#### Prerequisites
-- Python 3.10+
-- Anaconda or Miniconda
-- NVIDIA GPU with CUDA (optional, but recommended)
-- Apple Silicon with Metal support (alternative to NVIDIA)
+Choose **either** [uv](https://docs.astral.sh/uv/) (`pyproject.toml`) **or** conda (`environment.yml`). You do not need both.
 
-#### Setup
+#### Prerequisites
+- Python 3.10–3.12
+- NVIDIA GPU with CUDA (optional, but recommended) **or** Apple Silicon with Metal (MPS)
+- For uv: install [uv](https://docs.astral.sh/uv/getting-started/installation/)
+- For conda: Anaconda, Miniconda, or Miniforge
+
+#### A) Setup with uv (recommended if you want a fast, lockable venv)
 
 ```bash
-# Clone the repository
 git clone https://github.com/arvidl/medAI-hands-on-dev.git
 cd medAI-hands-on-dev
 
-# Create conda environment
+# Create .venv, install dependencies, and install this repo (editable)
+uv sync
+
+# Activate (optional; `uv run` works without activating)
+source .venv/bin/activate          # Linux / macOS
+# .venv\Scripts\activate         # Windows
+
+# Register a Jupyter kernel (once)
+python -m ipykernel install --user --name medai-handson --display-name "Python (medai-handson)"
+
+# Launch notebooks
+jupyter notebook
+# or without activating:
+# uv run jupyter notebook
+```
+
+Useful uv commands:
+
+```bash
+uv sync                  # create/update .venv from pyproject.toml
+uv sync --extra extras   # also install torchinfo / torch-geometric
+uv add <package>         # add a dependency to pyproject.toml
+uv run python scripts/create_brats_subset.py --help
+uv run jupyter lab
+```
+
+**CUDA with uv:** default PyPI `torch` wheels often include CUDA on Linux. To pin a specific CUDA build:
+
+```bash
+uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
+```
+
+**Apple Silicon:** `uv sync` is enough; PyTorch will use MPS when available.
+
+#### B) Setup with conda (`medai-handson`)
+
+```bash
+git clone https://github.com/arvidl/medAI-hands-on-dev.git
+cd medAI-hands-on-dev
+
+# Create the named environment from environment.yml
 conda env create -f environment.yml
 
-# Activate environment
+# Activate
 conda activate medai-handson
 
-# Launch Jupyter
+# Launch notebooks
 jupyter notebook
 ```
 
-#### Apple Silicon (M1/M2/M3/M4) Users
+Useful conda commands:
 
-The default `environment.yml` is configured for NVIDIA GPUs. For Apple Silicon:
+```bash
+conda activate medai-handson
+conda env update -f environment.yml --prune   # refresh after pulling changes
+conda deactivate
+conda env remove -n medai-handson             # delete the env
+```
 
-1. Edit `environment.yml` and remove `pytorch-cuda=11.8`
-2. PyTorch will automatically use Metal Performance Shaders (MPS)
+**CUDA with conda** (after `conda activate medai-handson`):
+
+```bash
+conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
+```
+
+**Apple Silicon:** use the default `environment.yml` as-is; conda-forge PyTorch uses MPS.
+
+#### Verify the install
+
+```bash
+python -c "import torch, monai, nibabel, transformers; from src import data_utils, models; print(torch.__version__, torch.cuda.is_available())"
+```
 
 ## Repository Structure
 
@@ -74,9 +131,8 @@ The default `environment.yml` is configured for NVIDIA GPUs. For Apple Silicon:
 medAI-hands-on-dev/
 +-- README.md                 # This file
 +-- LICENSE                   # MIT License
-+-- environment.yml           # Conda environment specification
-+-- environment-cuda.yml      # CUDA-specific environment
-+-- requirements.txt          # Pip requirements (for Colab)
++-- pyproject.toml            # uv / pip project + dependencies
++-- environment.yml           # Conda environment (name: medai-handson)
 |
 +-- assets/                   # Notebook assets (images, figures)
 |   +-- unirg_RL_framework_2026.png

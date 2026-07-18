@@ -1,0 +1,84 @@
+[project]
+name = "medai-handson"
+version = "0.1.0"
+description = "Hands-on AI for computational medicine (book chapter notebooks and utilities)"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+  { name = "Arvid Lundervold" },
+]
+requires-python = ">=3.10,<3.13"
+keywords = ["medical-imaging", "deep-learning", "pytorch", "monai", "llm"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: Medical Science Apps.",
+]
+
+# Core dependencies used by src/, scripts/, and the three notebooks.
+dependencies = [
+  "numpy>=1.24",
+  "scipy>=1.10",
+  "pandas>=2.0",
+  "matplotlib>=3.7",
+  "seaborn>=0.13",
+  "scikit-learn>=1.3",
+  "nibabel>=5.0",
+  "monai>=1.3",
+  "torch>=2.0",
+  "networkx>=3.0",
+  "python-louvain>=0.16",
+  "lifelines>=0.27",
+  "tqdm>=4.66",
+  "jupyter>=1.0",
+  "ipykernel>=6.25",
+  "ipywidgets>=8.0",
+  # Notebook 03 (LLM-assisted computing)
+  "transformers>=4.35",
+  "accelerate>=0.25",
+  "sentencepiece>=0.1.99",
+  "huggingface-hub>=0.20",
+  "chromadb>=0.4",
+  "sentence-transformers>=2.2",
+]
+
+[project.optional-dependencies]
+# Optional extras used in advanced notebook cells
+extras = [
+  "torchinfo>=1.8",
+  "torch-geometric>=2.4",
+]
+dev = [
+  "ruff>=0.4",
+  "pytest>=8.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/arvidl/medAI-hands-on"
+Repository = "https://github.com/arvidl/medAI-hands-on"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+# Keep the existing import path used by notebooks: `from src...`
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src",
+  "scripts",
+  "notebooks",
+  "README.md",
+  "LICENSE",
+]
+
+[tool.uv]
+package = true
+
+# Default PyPI torch wheels work for CPU and many CUDA setups.
+# For a pinned CUDA wheel index, see README (uv section).
