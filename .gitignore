@@ -1,0 +1,202 @@
+# =============================================================================
+# .gitignore for medAI-hands-on-dev
+# Python/Jupyter + LaTeX + Medical Imaging project
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Python
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# -----------------------------------------------------------------------------
+# Jupyter Notebooks
+# -----------------------------------------------------------------------------
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+
+# Jupyter notebook output (optional - uncomment if you don't want outputs in git)
+# *.ipynb
+
+# -----------------------------------------------------------------------------
+# LaTeX
+# -----------------------------------------------------------------------------
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.idx
+*.ilg
+*.ind
+*.nav
+*.snm
+*.vrb
+*.dvi
+*.ps
+
+# latexmk
+*.fdb_latexmk
+*.fls
+
+# BibTeX
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Generated PDF (uncomment if you want to exclude compiled PDFs)
+# chapter/*.pdf
+
+# -----------------------------------------------------------------------------
+# Medical Imaging Data (often large files - DO NOT TRACK)
+# -----------------------------------------------------------------------------
+# NIfTI files (can be 100s of MB each)
+*.nii
+*.nii.gz
+
+# DICOM files
+*.dcm
+*.dicom
+
+# NumPy arrays (synthetic sample data - small, can be tracked separately)
+# data/brats_sample/**/*.npy  # Uncomment to exclude synthetic data too
+
+# Downloaded datasets (LARGE - download on demand)
+# Medical Segmentation Decathlon Task01_BrainTumour (~7.5 GB)
+data/decathlon_brain/
+data/Task01_BrainTumour/
+
+# BraTS challenge data
+data/BraTS*/
+
+# General download folders
+data/downloaded/
+data/*.zip
+data/*.tar
+data/*.tar.gz
+data/*.tgz
+
+# BRATS subset zip files (created for GitHub releases)
+brats_subset_*.zip
+
+# Model checkpoints and weights (can be very large)
+*.pt
+*.pth
+*.onnx
+*.h5
+*.hdf5
+checkpoints/
+models/saved/
+
+# EXCEPTION: Track small pretrained models for the tutorial
+!models/pretrained/*.pt
+!models/pretrained/README.md
+
+# -----------------------------------------------------------------------------
+# IDE and Editors
+# -----------------------------------------------------------------------------
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# -----------------------------------------------------------------------------
+# OS-specific
+# -----------------------------------------------------------------------------
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# -----------------------------------------------------------------------------
+# Temporary and Cache Files
+# -----------------------------------------------------------------------------
+*.tmp
+*.temp
+*.cache
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# -----------------------------------------------------------------------------
+# Logs
+# -----------------------------------------------------------------------------
+*.log
+logs/
+
+# -----------------------------------------------------------------------------
+# Project-specific exclusions
+# -----------------------------------------------------------------------------
+# Personal working folder (not for public repo)
+MyStuff/
+
+# MedSAM2 (large external dependency - clone separately)
+MedSAM2/
+
+# -----------------------------------------------------------------------------
+# Misc
+# -----------------------------------------------------------------------------
+# Secrets and credentials (never commit these!)
+*.pem
+*.key
+secrets.json
+credentials.json
+.env.local
+.env.*.local
+
+# Large output files
+*.csv
+!data/README.md
