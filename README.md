@@ -1,6 +1,6 @@
 # Artificial Intelligence and Computational Medicine - A Hands-on Approach
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on-dev/blob/main/notebooks/01_medical_imaging.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on/blob/main/notebooks/01_medical_imaging.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This repository accompanies the book chapter *"Artificial Intelligence and Computational Medicine - A Hands-on Approach"* for the second edition of **Medical Applications of Artificial Intelligence** (CRC Press/Taylor & Francis, 2026).
@@ -23,9 +23,9 @@ Click the badge below to open the notebooks directly in Google Colab:
 
 | Notebook | Description | Open in Colab |
 |----------|-------------|---------------|
-| Medical Imaging | Brain tumor segmentation with U-Net | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on-dev/blob/main/notebooks/01_medical_imaging.ipynb) |
-| Multimodal Integration | Imaging + clinical data fusion | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on-dev/blob/main/notebooks/02_multimodal_integration.ipynb) |
-| LLM-Assisted Computing | Medical text analysis with LLMs | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on-dev/blob/main/notebooks/03_llm_assisted_computing.ipynb) |
+| Medical Imaging | Brain tumor segmentation with U-Net | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on/blob/main/notebooks/01_medical_imaging.ipynb) |
+| Multimodal Integration | Imaging + clinical data fusion | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on/blob/main/notebooks/02_multimodal_integration.ipynb) |
+| LLM-Assisted Computing | Medical text analysis with LLMs | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on/blob/main/notebooks/03_llm_assisted_computing.ipynb) |
 
 **Colab Tips:**
 - Go to `Runtime > Change runtime type > GPU` for faster execution
@@ -33,7 +33,7 @@ Click the badge below to open the notebooks directly in Google Colab:
 
 > **Note for Private Repositories:** If this repository is private, Colab's automatic cloning requires authentication. You may need to:
 > 1. Generate a GitHub Personal Access Token with `repo` scope
-> 2. Use `!git clone https://<TOKEN>@github.com/arvidl/medAI-hands-on-dev.git` in Colab
+> 2. Use `!git clone https://<TOKEN>@github.com/arvidl/medAI-hands-on.git` in Colab
 > 3. Or make the repository public for seamless Colab access
 
 ### Option 2: Local Installation
@@ -49,8 +49,8 @@ Choose **either** [uv](https://docs.astral.sh/uv/) (`pyproject.toml`) **or** con
 #### A) Setup with uv (recommended if you want a fast, lockable venv)
 
 ```bash
-git clone https://github.com/arvidl/medAI-hands-on-dev.git
-cd medAI-hands-on-dev
+git clone https://github.com/arvidl/medAI-hands-on.git
+cd medAI-hands-on
 
 # Create .venv, install dependencies, and install this repo (editable)
 uv sync
@@ -89,8 +89,8 @@ uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu
 #### B) Setup with conda (`medai-handson`)
 
 ```bash
-git clone https://github.com/arvidl/medAI-hands-on-dev.git
-cd medAI-hands-on-dev
+git clone https://github.com/arvidl/medAI-hands-on.git
+cd medAI-hands-on
 
 # Create the named environment from environment.yml
 conda env create -f environment.yml
@@ -128,7 +128,7 @@ python -c "import torch, monai, nibabel, transformers; from src import data_util
 ## Repository Structure
 
 ```
-medAI-hands-on-dev/
+medAI-hands-on/
 +-- README.md                 # This file
 +-- LICENSE                   # MIT License
 +-- pyproject.toml            # uv / pip project + dependencies

@@ -7,7 +7,7 @@ This directory stores datasets used in the notebooks.
 | Dataset | Size | Tracked in Git? | Notes |
 |---------|------|-----------------|-------|
 | `README.md` | 5 KB | ✅ Yes | Documentation only |
-| `brats_subset_50.zip` | ~450 MB | 📦 **GitHub Release** | Subset for Colab (50 cases) |
+| `brats_subset_100.zip` | ~900 MB–3 GB | 📦 **GitHub Release** | Subset for Colab (100 cases) |
 | `brats_sample/` | ~21 MB | ⚠️ Optional | Small synthetic data for quick demos |
 | `decathlon_brain/` | **~14 GB** | ❌ **No** | Downloaded on-demand via notebook |
 | `BraTS*/` | Variable | ❌ No | Requires manual registration & download |
@@ -20,19 +20,19 @@ This directory stores datasets used in the notebooks.
 
 ### Option 1: GitHub Subset (Recommended for Colab) ⭐
 
-The **50-case BRATS subset** is hosted as a GitHub Release for fast, reliable access:
+The **100-case BRATS subset** is hosted as a GitHub Release for fast, reliable access:
 
 ```python
 # Automatic in Colab, or force with:
-DATA_SOURCE = "github_subset"  # Downloads ~450 MB from GitHub Release
+DATA_SOURCE = "github_subset"  # Downloads ~900 MB from GitHub Release
 ```
 
 | Property | Value |
 |----------|-------|
-| Cases | BRATS_001 through BRATS_050 (50 cases) |
-| Size | ~450 MB download |
+| Cases | BRATS_001 through BRATS_100 (100 cases) |
+| Size | ~900 MB download |
 | Format | Same as Decathlon (NIfTI, 4 modalities + labels) |
-| Splits | 35 train / 7 validation / 8 test (SEED=42) |
+| Splits | 70 train / 15 validation / 15 test (SEED=42) |
 
 ### Option 2: Full Decathlon (Local Development)
 
@@ -189,34 +189,31 @@ data/
 
 ## GitHub Release Data
 
-The 50-case BRATS subset is hosted as a GitHub Release asset for reliable access from Colab.
+The 100-case BRATS subset is hosted as a GitHub Release asset for reliable access from Colab.
 
 ### For Maintainers: Updating the Release
 
 If you need to update the data subset:
 
-1. Create the subset zip:
+1. Create the subset zip (from a full Decathlon download):
 ```bash
-cd data
-mkdir -p brats_subset_release/Task01_BrainTumour/{imagesTr,labelsTr}
-for i in $(seq -w 1 50); do
-    cp decathlon_brain/Task01_BrainTumour/imagesTr/BRATS_0${i}.nii.gz brats_subset_release/Task01_BrainTumour/imagesTr/
-    cp decathlon_brain/Task01_BrainTumour/labelsTr/BRATS_0${i}.nii.gz brats_subset_release/Task01_BrainTumour/labelsTr/
-done
-cd brats_subset_release && zip -r ../brats_subset_50.zip Task01_BrainTumour/
+python scripts/create_brats_subset.py \
+  --input data/decathlon_brain/Task01_BrainTumour \
+  --output brats_subset_100.zip \
+  --num-cases 100
 ```
 
 2. Create a GitHub Release:
-   - Go to: https://github.com/arvidl/medAI-hands-on-dev/releases/new
-   - Tag: `v1.0-data`
-   - Title: "BRATS Subset Data (50 cases)"
-   - Description: "50-case subset of Medical Segmentation Decathlon brain tumor data for fast Colab access"
-   - Attach: `brats_subset_50.zip`
+   - Go to: https://github.com/arvidl/medAI-hands-on/releases/new
+   - Tag: `v1.1-data`
+   - Title: "BRATS Subset Data (100 cases)"
+   - Description: "100-case subset of Medical Segmentation Decathlon brain tumor data for Colab/local notebooks"
+   - Attach: `brats_subset_100.zip` (optional: `brain_tumor_unet3d.pt`)
    - Publish
 
 3. The download URL will be:
 ```
-https://github.com/arvidl/medAI-hands-on-dev/releases/download/v1.0-data/brats_subset_50.zip
+https://github.com/arvidl/medAI-hands-on/releases/download/v1.1-data/brats_subset_100.zip
 ```
 
 ---

@@ -83,7 +83,7 @@ def create_subset(input_dir: Path, output_zip: Path, num_cases: int = 100):
     print(f"  Size: {size_gb:.2f} GB ({size_bytes:,} bytes)")
     print(f"  Cases: {num_cases}")
     print(f"\nTo upload as GitHub Release:")
-    print(f"  1. Go to https://github.com/arvidl/BMED365-2026/releases/new")
+    print(f"  1. Go to https://github.com/arvidl/medAI-hands-on/releases/new")
     print(f"  2. Tag: v1.1-data")
     print(f"  3. Title: BRATS Subset v1.1 (100 cases)")
     print(f"  4. Attach: {output_zip.name}")

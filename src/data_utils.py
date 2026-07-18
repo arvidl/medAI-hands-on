@@ -197,10 +197,9 @@ def download_brats_subset_github(data_dir: Path) -> Path:
         print(f"BRATS subset already exists at {subset_path} ({n_files} cases)")
         return subset_path
     
-    # GitHub Release URL
-    # The release is hosted on the public BMED365-2026 repo for universal access
+    # GitHub Release URL (public repo — works from Colab without auth)
     RELEASE_TAG = "v1.1-data"
-    REPO = "arvidl/BMED365-2026"
+    REPO = "arvidl/medAI-hands-on"
     FILENAME = "brats_subset_100.zip"
     release_url = f"https://github.com/{REPO}/releases/download/{RELEASE_TAG}/{FILENAME}"
     
@@ -294,7 +293,7 @@ def download_pretrained_model_github(models_dir: Path) -> Optional[Path]:
     
     # GitHub Release URL (same release as BRATS data)
     RELEASE_TAG = "v1.1-data"
-    REPO = "arvidl/BMED365-2026"
+    REPO = "arvidl/medAI-hands-on"
     FILENAME = "brain_tumor_unet3d.pt"
     url = f"https://github.com/{REPO}/releases/download/{RELEASE_TAG}/{FILENAME}"
     
