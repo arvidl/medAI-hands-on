@@ -86,6 +86,17 @@ uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu
 
 **Apple Silicon:** `uv sync` is enough; PyTorch will use MPS when available.
 
+**If your prompt shows `(base)` (conda):** `uv sync` is still fine — it installs into project-local `.venv`, not into conda. To avoid mixing environments when you run notebooks or scripts, either:
+
+```bash
+conda deactivate          # leave conda base, then: source .venv/bin/activate
+# or keep (base) and always use:
+uv run jupyter notebook
+uv run python -c "import torch; print(torch.__version__)"
+```
+
+Do **not** run `conda install` into `(base)` for this project if you are using uv; pick one stack (uv **or** the `medai-handson` conda env).
+
 #### B) Setup with conda (`medai-handson`)
 
 ```bash
