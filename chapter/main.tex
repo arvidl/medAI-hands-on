@@ -398,9 +398,9 @@ Current LLM applications in medicine vary substantially in maturity and readines
 \midrule
 \textbf{Literature Review} & Operational Support & 85\% screening accuracy; 40\% time reduction in systematic reviews; emergence of PRISMA-trAIce reporting standards \\[1ex]
 \textbf{Code Assistance} & Ubiquitous & 84\% developer adoption globally; 74\% autonomous fix rate on verified benchmarks; shift to agentic coding workflows \\[1ex]
-\textbf{Report Drafting} & Regulated Production & $>$1,000 FDA authorizations in radiology; reinforcement learning (UniRG) effectively mitigates clinical hallucinations \\[1ex]
+\textbf{Report Drafting} & Advancing (supervised) & \textcolor{blue}{Ambient scribes and RL report frameworks (e.g., UniRG) target clinical hallucination reduction. Note: $>$1{,}000 FDA AI authorizations are mostly imaging \emph{devices}, not generative report writers.} \\[1ex]
 \textbf{Clinical Q\&A} & Deployed with Supervision & 75\% draft rate in major health systems; requires human-in-the-loop validation for patient-facing use \\[1ex]
-\textbf{Diagnostic Support} & Advanced Decision Support & 94\% accuracy vs.\ 70.5\% human on image challenges; emergence of chain-of-thought reasoning agents \\
+\textbf{Diagnostic Support} & Research / supervised use & \textcolor{blue}{Strong results on selected benchmarks (e.g., NEJM Image Challenge MCQs); not equivalent to unsupervised clinical diagnosis. Chain-of-thought agents are an active research direction.} \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -433,7 +433,7 @@ We demonstrate some of these capabilities in \notebook{03\_llm\_assisted\_comput
 A critical barrier to clinical LLM deployment has been hallucination, the generation of plausible but factually incorrect statements. Several mitigation strategies have emerged:
 
 \begin{description}[style=nextline, leftmargin=1em, labelindent=0pt, itemsep=0.2ex]
-\item[Retrieval-Augmented Generation (RAG)] Ground LLM responses in retrieved documents from verified sources (clinical guidelines, peer-reviewed literature), reducing reliance on parametric memory that may contain errors. We demonstrate a complete RAG implementation in \notebook{03\_llm\_assisted\_computing.ipynb}, using ChromaDB for vector storage and sentence transformers for embeddings.
+\item[Retrieval-Augmented Generation (RAG)] Ground LLM responses in retrieved documents from verified sources (clinical guidelines, peer-reviewed literature), reducing reliance on parametric memory that may contain errors. \textcolor{blue}{We demonstrate the RAG mechanism in \notebook{03\_llm\_assisted\_computing.ipynb} with ChromaDB and sentence-transformer embeddings over a small teaching corpus; production deployments should index verified guidelines and peer-reviewed literature.}
 
 \item[Chain-of-Thought Reasoning] Prompting models to explicitly show reasoning steps enables verification of the logical path to conclusions and often improves accuracy on complex medical queries. Current frontier models incorporate this capability natively as ``extended thinking'' modes (e.g., GPT-5 with reasoning, Claude extended thinking, Gemini Deep Think), where the model performs deliberate multi-step reasoning before responding~\citep{wei2022chainofthought}. These reasoning models achieve substantially higher accuracy on complex analytical tasks by allocating additional inference-time computation.
 

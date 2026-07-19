@@ -44,7 +44,7 @@ Use this after pulling `main` to confirm Colab + release assets still work (~30�
 |----------|------------|---------|
 | **01** Medical Imaging | Run setup (deps + repo clone) → `DATA_SOURCE = "github_subset"` download → load/plot one case → load pretrained U-Net (`USE_PRETRAINED = True`) → optional: hold-out test eval. Skip full training, MedSAM2, and §6.1 HD95 (`RUN_HD95=False`). | Clone succeeds (`src` importable); `brats_subset_100.zip` (~900 MB) from `v1.1-data`; volumes load; pretrained U-Net loads |
 | **02** Multimodal | Run setup (deps + repo clone) → fusion training (modality dropout + presence masks, early stopping) → §8.5 missing-modality → §8.6 calibration/DCA (+ interpretation markdown). Skip optional GNN unless you install extras. | Clone/`src` OK; training restores best val model; §8.5 shows α≈1 / β≈1 under single-modality presence masks; §8.6 prints ECE (often ~0.1) and shows calibration + DCA plots with the reading guide |
-| **03** LLM | Run setup → summarization **or** NER → one SmolLM2 code-gen cell → RAG retrieve + answer. | No `KeyError` on removed transformers v5 pipelines; models download from Hugging Face; RAG returns sources |
+| **03** LLM | Run setup → summarization **or** NER → one SmolLM2 code-gen cell → RAG retrieve + answer (teaching corpus). | No `KeyError` on removed transformers v5 pipelines; models download from Hugging Face; RAG retrieves teaching docs with cosine similarity |
 
 **Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2 install/inference, Notebook 01 §6.1 HD95, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
 
@@ -311,19 +311,21 @@ Combines imaging-derived features with clinical data for patient outcome predict
 Leverages open-source Hugging Face models for medical research workflows (Chapter §22.5). No proprietary API keys required for the demos.
 
 **Core Topics:**
-- Evidence-based LLM maturity assessment (2025–2026 literature + prospective 2026 matrix)
+- Dual maturity framing: cautious ≈2025 snapshot vs prospective 2026 matrix (chapter-aligned; FDA/NEJM evidence carefully scoped)
 - **Summarization**: `facebook/bart-large-cnn` loaded directly (transformers v5 removed the `summarization` pipeline)
 - **Zero-shot classification**: `facebook/bart-large-mnli` via `pipeline("zero-shot-classification")`
 - **Biomedical NER**: `d4data/biomedical-ner-all` via `pipeline("token-classification")`
 - **Code generation**: `HuggingFaceTB/SmolLM2-360M-Instruct` drafts helpers; curated templates shown as post-review references
 - **Extractive QA**: DistilBERT/SQuAD via `AutoModelForQuestionAnswering` (v5 removed `question-answering` pipeline)
-- **RAG**: ChromaDB + `sentence-transformers` (`all-MiniLM-L6-v2`) retrieval; grounded answers from the same instruct model
+- **RAG**: ChromaDB (**cosine** space) + `all-MiniLM-L6-v2` over a small **teaching corpus**; answers from SmolLM2 (mechanism demo, not a verified literature index)
 - **Hallucination mitigations**: RAG grounding, chain-of-thought prompting, output-variability demo
 - Best practices / governance for clinical AI (human-in-the-loop)
+- Intermediate `free_globals(...)` calls release classifier/NER/QA weights between stages
 
 **Learning Features:**
-- Connection to Notebooks 01 and 02 ("Three Pillars of Medical AI")
+- Connection to Notebooks 01 and 02
 - Clinical context and expandable technical notes for each NLP task
+- UniRG figure loaded from `assets/` (not base64-embedded)
 - First run downloads several HF models (cache often ~3–4 GB)
 
 **Runtime:** ~30–45 minutes (first run longer while models download)
