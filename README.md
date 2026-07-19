@@ -43,7 +43,7 @@ Use this after pulling `main` to confirm Colab + release assets still work (~30�
 | Notebook | Smoke path | Pass if |
 |----------|------------|---------|
 | **01** Medical Imaging | Run setup (deps + repo clone) → `DATA_SOURCE = "github_subset"` download → load/plot one case → load pretrained U-Net (`USE_PRETRAINED = True`) → optional: hold-out test eval. Skip full training, MedSAM2, and §6.1 HD95 (`RUN_HD95=False`). | Clone succeeds (`src` importable); `brats_subset_100.zip` (~900 MB) from `v1.1-data`; volumes load; pretrained U-Net loads |
-| **02** Multimodal | Run setup (deps + repo clone) → fusion training (modality dropout + presence masks, early stopping) → §8.5 missing-modality → §8.6 calibration/DCA. Skip optional GNN unless you install extras. | Clone/`src` OK; training restores best val model; §8.5 shows α≈1 / β≈1 under single-modality presence masks; calibration + DCA plots appear |
+| **02** Multimodal | Run setup (deps + repo clone) → fusion training (modality dropout + presence masks, early stopping) → §8.5 missing-modality → §8.6 calibration/DCA (+ interpretation markdown). Skip optional GNN unless you install extras. | Clone/`src` OK; training restores best val model; §8.5 shows α≈1 / β≈1 under single-modality presence masks; §8.6 prints ECE (often ~0.1) and shows calibration + DCA plots with the reading guide |
 | **03** LLM | Run setup → summarization **or** NER → one SmolLM2 code-gen cell → RAG retrieve + answer. | No `KeyError` on removed transformers v5 pipelines; models download from Hugging Face; RAG returns sources |
 
 **Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2 install/inference, Notebook 01 §6.1 HD95, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
@@ -290,17 +290,17 @@ Combines imaging-derived features with clinical data for patient outcome predict
 - **Adaptive feature fusion**: Learned modality weights α (imaging) and β (clinical), with **presence masks** for missing modalities
 - Training with **modality dropout** + early stopping (restore best validation weights)
 - **Missing-modality / ablation evaluation**: Accuracy and forced α/β when a modality is absent
-- **Calibration & decision curve analysis (DCA)**: Reliability curve, ECE, net benefit vs treat-all/none
+- **Calibration & decision curve analysis (DCA)**: Reliability curve, ECE (typically ~0.1 on this synthetic test set), net benefit vs treat-all/treat-none, plus a dedicated interpretation cell
 - **Patient Similarity Networks (PSN)**: Cosine similarity graphs, threshold sweeps, hierarchical clustering
 - **Community Detection**: Louvain modularity and permutation significance testing (n=50 viz subset)
 - **Optional GNN section**: GCN on a train∥test PSN aligned with fused node features; semi-supervised label fractions (`uv sync --extra extras`)
-- Final held-out test metrics (accuracy, precision/recall, confusion matrix)
+- Final held-out test metrics (~93% accuracy in the reference run; precision/recall, confusion matrix)
 
 **Learning Features:**
-- "How to read this plot" guidance for each visualization
+- "How to read this plot" guidance for each visualization (including §8.6 calibration/DCA)
 - Clinical implications and trade-offs throughout
 - Collapsible technical notes (e.g., Louvain algorithm details)
-- Limitations and caveats discussion
+- Limitations and caveats discussion (synthetic-data caveats; correlated imaging blocks)
 
 **Runtime:** ~30–45 minutes (longer if you run the optional GNN cells)
 
