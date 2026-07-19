@@ -54,5 +54,8 @@ dependencies:
       - huggingface-hub>=0.20
       - chromadb>=0.4
       - sentence-transformers>=2.2
+      # Notebook 02 (optional but needed for HAS_TORCH_GEOMETRIC / torchinfo summary):
+      - torchinfo>=1.8
+      - torch-geometric>=2.4
       # Install local package in editable mode (provides `import src`)
       - -e .

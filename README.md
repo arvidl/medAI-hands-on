@@ -72,7 +72,7 @@ Useful uv commands:
 
 ```bash
 uv sync                  # create/update .venv from pyproject.toml
-uv sync --extra extras   # also install torchinfo / torch-geometric
+uv sync --extra extras   # Notebook 02: torchinfo + torch-geometric (see below)
 uv add <package>         # add a dependency to pyproject.toml
 uv run python scripts/create_brats_subset.py --help
 uv run jupyter lab
@@ -160,6 +160,39 @@ cd MedSAM2 && bash download.sh && cd ..
 Then **restart the Jupyter kernel**, re-run Notebook 01 through the MedSAM2 availability cell, and confirm you see `✓ MedSAM2 available`.
 
 Expect `MedSAM2/checkpoints/MedSAM2_latest.pt`. The notebook looks for `./MedSAM2` or `../MedSAM2` relative to the Jupyter working directory.
+
+> **Note:** `MedSAM2` is installed with `uv pip install -e ./MedSAM2` (not via `pyproject.toml`). Running `uv sync` afterward may remove it from `.venv`; re-run the editable install if needed.
+
+#### Optional: Notebook 02 extras (`torchinfo`, PyTorch Geometric)
+
+Notebook 02’s core fusion + patient-similarity sections run without these packages. To execute **all** cells — including the richer model summary and the GNN section that sets `HAS_TORCH_GEOMETRIC = True` — install the `extras` optional dependency group:
+
+```bash
+cd medAI-hands-on
+
+# Recommended (updates .venv from pyproject.toml [project.optional-dependencies] extras)
+uv sync --extra extras
+
+# Equivalent one-off install into the existing .venv
+uv pip install torchinfo torch-geometric
+```
+
+With conda instead of uv (after `conda activate medai-handson`):
+
+```bash
+pip install torchinfo torch-geometric
+```
+
+Then **restart the Jupyter kernel** and re-run Notebook 02. You should see:
+
+- a `torchinfo` model summary (instead of the basic `print(model)` fallback)
+- `✓ PyTorch Geometric ... available` and `HAS_TORCH_GEOMETRIC = True`
+
+Verify:
+
+```bash
+uv run python -c "import torchinfo, torch_geometric; print(torchinfo.__version__, torch_geometric.__version__)"
+```
 
 ## Repository Structure
 
