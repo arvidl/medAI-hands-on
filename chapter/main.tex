@@ -344,7 +344,7 @@ Through stacked layers (each aggregating from immediate neighbors), information 
 A patient with unknown outcome can thus ``borrow'' information from similar patients with known outcomes, enabling \emph{semi-supervised learning}~\citep{kipf2017semi} where labeled and unlabeled patients jointly inform the model.
 
 This is particularly valuable in medical settings where labeled outcomes are scarce, but unlabeled patient data is abundant.
-In \notebook{02\_multimodal\_integration.ipynb}, we demonstrate that GCNs maintain reasonable accuracy even when only 50\% of patients have labeled outcomes, effectively propagating labels through the similarity structure.
+\textcolor{blue}{In \notebook{02\_multimodal\_integration.ipynb}, we build a PSN on the same train/test node set used by the GCN and show that reasonable accuracy can be maintained even when only 50\% of training patients have labeled outcomes, illustrating label sharing through the similarity structure.}
 The approach extends naturally to heterogeneous graphs incorporating multiple relationship types (shared diagnoses, similar treatments, comparable biomarker profiles).
 
 \begin{figure}[H]
@@ -359,10 +359,10 @@ The approach extends naturally to heterogeneous graphs incorporating multiple re
 
 A practical challenge in multimodal integration is missing data~\citep{wu2026missing}. Common strategies include: \emph{imputation} (replacing missing values with estimates such as mean, k-nearest neighbor, or learned networks), \emph{masking} (randomly dropping modalities during training so the model learns robustness), and \emph{late fusion} (computing modality-specific predictions independently, then combining only available modalities).
 
-Our adaptive fusion architecture (Section~\ref{sec:multimodal}) naturally handles masking.
+Our adaptive fusion architecture (Section~\ref{sec:multimodal}) supports masking during training and evaluation.
 Consider a patient with imaging data but missing clinical records.
-We set $\mathbf{x}_{\text{clin}} = \mathbf{0}$, yielding an uninformative encoding $\mathbf{z}_{\text{clin}} = f_{\text{clin}}(\mathbf{0})$.
-The weighting network $g$, trained on complete cases with modality dropout, learns to recognize this pattern and assigns $\beta \approx 0$, shifting weight to imaging: $\mathbf{z}_{\text{fused}} \approx \alpha \cdot \mathbf{z}_{\text{img}}$ with $\alpha \approx 1$.
+\textcolor{blue}{Zeroing $\mathbf{x}_{\text{clin}} = \mathbf{0}$ alone does not reliably drive the attention MLP to $\beta \approx 0$.
+In \notebook{02\_multimodal\_integration.ipynb} we therefore combine modality dropout with \emph{presence masks}: a missing modality is zeroed and its fusion weight is forced to zero (renormalizing the remaining weight), so $\mathbf{z}_{\text{fused}} \approx \alpha \cdot \mathbf{z}_{\text{img}}$ with $\alpha = 1$ when clinical data are unavailable.}
 For PSN construction, patients with missing modalities can still be included using available features, with similarity computed over the common feature space.
 
 \subsection{EVALUATION AND CLINICAL UTILITY}

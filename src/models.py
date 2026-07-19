@@ -231,30 +231,53 @@ class MultimodalFusionNet(nn.Module):
     def forward(
         self,
         imaging_features: torch.Tensor,
-        clinical_features: torch.Tensor
+        clinical_features: torch.Tensor,
+        imaging_present: Optional[torch.Tensor] = None,
+        clinical_present: Optional[torch.Tensor] = None,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         """
         Forward pass.
-        
+
+        Optional ``imaging_present`` / ``clinical_present`` are per-sample
+        masks (bool or 0/1, shape ``(B,)`` or ``(B, 1)``). When a modality is
+        marked missing, its fusion weight is forced to 0 and the remaining
+        weight is renormalized. Zeroing inputs alone does not reliably shift
+        the attention MLP; presence masking is what implements the chapter's
+        missing-modality behavior.
+
         Returns:
             logits: Classification logits
-            attention_weights: Attention weights for interpretability
+            attention_weights: Effective fusion weights (after presence masking)
         """
         # Encode modalities
         img_encoded = self.imaging_encoder(imaging_features)
         clin_encoded = self.clinical_encoder(clinical_features)
-        
+
         # Compute attention weights
         combined = torch.cat([img_encoded, clin_encoded], dim=1)
         attention_weights = self.attention(combined)
-        
+
+        # Presence-aware masking (modality dropout / missing-modality eval)
+        if imaging_present is not None or clinical_present is not None:
+            batch = attention_weights.shape[0]
+            device = attention_weights.device
+            if imaging_present is None:
+                imaging_present = torch.ones(batch, device=device)
+            if clinical_present is None:
+                clinical_present = torch.ones(batch, device=device)
+            img_p = imaging_present.reshape(batch, 1).to(device=device, dtype=attention_weights.dtype)
+            clin_p = clinical_present.reshape(batch, 1).to(device=device, dtype=attention_weights.dtype)
+            mask = torch.cat([img_p, clin_p], dim=1)
+            attention_weights = attention_weights * mask
+            attention_weights = attention_weights / attention_weights.sum(dim=1, keepdim=True).clamp_min(1e-8)
+
         # Weighted fusion
-        fused = (attention_weights[:, 0:1] * img_encoded + 
+        fused = (attention_weights[:, 0:1] * img_encoded +
                  attention_weights[:, 1:2] * clin_encoded)
-        
+
         # Classification
         logits = self.classifier(fused)
-        
+
         return logits, attention_weights
 
 

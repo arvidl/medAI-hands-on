@@ -29,10 +29,10 @@ Click the badge below to open the notebooks directly in Google Colab:
 
 **Colab Tips:**
 - Go to `Runtime > Change runtime type > GPU` for faster execution
-- Notebook 01 clones this repository into `/content/medAI-hands-on` so `from src...` imports work (same helpers as local)
+- Notebooks 01 and 02 clone this repository into `/content/medAI-hands-on` so `from src...` imports work (same helpers as local)
 - Other notebooks install their dependencies in the setup cells
 
-> **Note for Private Repositories:** Notebook 01’s Colab setup runs `git clone https://github.com/arvidl/medAI-hands-on.git`. If the repository is private, that clone needs authentication:
+> **Note for Private Repositories:** Notebooks 01–02 Colab setup runs `git clone https://github.com/arvidl/medAI-hands-on.git`. If the repository is private, that clone needs authentication:
 > 1. Generate a GitHub Personal Access Token with `repo` scope
 > 2. Use `!git clone https://<TOKEN>@github.com/arvidl/medAI-hands-on.git /content/medAI-hands-on` (or make the repo public)
 
@@ -43,7 +43,7 @@ Use this after pulling `main` to confirm Colab + release assets still work (~30�
 | Notebook | Smoke path | Pass if |
 |----------|------------|---------|
 | **01** Medical Imaging | Run setup (deps + repo clone) → `DATA_SOURCE = "github_subset"` download → load/plot one case → load pretrained U-Net (`USE_PRETRAINED = True`) → optional: hold-out test eval. Skip full training, MedSAM2, and §6.1 HD95 (`RUN_HD95=False`). | Clone succeeds (`src` importable); `brats_subset_100.zip` (~900 MB) from `v1.1-data`; volumes load; pretrained U-Net loads |
-| **02** Multimodal | Run through fusion training (with modality dropout) → §8.5 missing-modality → §8.6 calibration/DCA. Skip optional GNN unless you install extras. | Training finishes; α/β printed for ablation scenarios; calibration + DCA plots appear |
+| **02** Multimodal | Run setup (deps + repo clone) → fusion training (modality dropout + presence masks, early stopping) → §8.5 missing-modality → §8.6 calibration/DCA. Skip optional GNN unless you install extras. | Clone/`src` OK; training restores best val model; §8.5 shows α≈1 / β≈1 under single-modality presence masks; calibration + DCA plots appear |
 | **03** LLM | Run setup → summarization **or** NER → one SmolLM2 code-gen cell → RAG retrieve + answer. | No `KeyError` on removed transformers v5 pipelines; models download from Hugging Face; RAG returns sources |
 
 **Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2 install/inference, Notebook 01 §6.1 HD95, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
@@ -287,13 +287,13 @@ Combines imaging-derived features with clinical data for patient outcome predict
 
 **Core Topics:**
 - Generating synthetic multimodal datasets with correlated clinical/imaging features
-- **Adaptive feature fusion**: Learned modality weights α (imaging) and β (clinical)
-- Training with **modality dropout** so the model can shift weight when a modality is missing
-- **Missing-modality / ablation evaluation**: Accuracy and mean α/β with imaging or clinical zeroed
+- **Adaptive feature fusion**: Learned modality weights α (imaging) and β (clinical), with **presence masks** for missing modalities
+- Training with **modality dropout** + early stopping (restore best validation weights)
+- **Missing-modality / ablation evaluation**: Accuracy and forced α/β when a modality is absent
 - **Calibration & decision curve analysis (DCA)**: Reliability curve, ECE, net benefit vs treat-all/none
 - **Patient Similarity Networks (PSN)**: Cosine similarity graphs, threshold sweeps, hierarchical clustering
-- **Community Detection**: Louvain modularity and permutation significance testing
-- **Optional GNN section**: GCN on the PSN with semi-supervised label fractions (`uv sync --extra extras`)
+- **Community Detection**: Louvain modularity and permutation significance testing (n=50 viz subset)
+- **Optional GNN section**: GCN on a train∥test PSN aligned with fused node features; semi-supervised label fractions (`uv sync --extra extras`)
 - Final held-out test metrics (accuracy, precision/recall, confusion matrix)
 
 **Learning Features:**
