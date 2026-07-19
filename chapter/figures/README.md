@@ -24,8 +24,9 @@ uv run python generate_figures.py
 
 **Requirements for real (non-placeholder) fig2/fig3:**
 
-- Decathlon or extracted subset under `data/decathlon_brain/` or compatible BraTS paths used by the script
-- Pretrained weights: `models/pretrained/brain_tumor_unet3d.pt`
+- Extracted Medical Segmentation Decathlon Task01 under `data/decathlon_brain/Task01_BrainTumour/`  
+  (`generate_figures.py` does **not** currently fall back to `data/brats_subset/`; without Decathlon it writes synthetic placeholders for fig2/fig3)
+- Pretrained weights: `models/pretrained/brain_tumor_unet3d.pt` (needed for fig3)
 - Packages from `pyproject.toml` / `environment.yml` (`nibabel`, `torch`, `matplotlib`, `networkx`, `scikit-learn`)
 
 Schematic figures (fig1, fig4 panel A, fig5) do not need imaging data. Fig4 panel B uses `src.data_utils.create_multimodal_dataset`.

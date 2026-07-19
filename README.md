@@ -165,7 +165,7 @@ Expect `MedSAM2/checkpoints/MedSAM2_latest.pt`. The notebook looks for `./MedSAM
 
 #### Optional: Notebook 02 extras (`torchinfo`, PyTorch Geometric)
 
-Notebook 02’s core fusion + patient-similarity sections run without these packages. To execute **all** cells — including the richer model summary and the GNN section that sets `HAS_TORCH_GEOMETRIC = True` — you need `torchinfo` and `torch-geometric`.
+Notebook 02’s fusion, PSN, missing-modality, calibration, and DCA sections run without these packages. To execute **all** cells — including the richer model summary and the GNN section that sets `HAS_TORCH_GEOMETRIC = True` — you need `torchinfo` and `torch-geometric`.
 
 **uv:** these are *not* in the default `uv sync`; install the optional extras group:
 
@@ -211,7 +211,9 @@ medAI-hands-on/
 |   +-- main.pdf              # Compiled chapter
 |   +-- references.bib        # Bibliography
 |   +-- krantz.cls            # CRC Press document class
-|   +-- figures/              # Chapter figures
+|   +-- figures/              # Chapter figures (PDFs) + generate_figures.py
+|       +-- README.md
+|       +-- generate_figures.py
 |
 +-- notebooks/                # Jupyter notebooks
 |   +-- 01_medical_imaging.ipynb
@@ -225,13 +227,12 @@ medAI-hands-on/
 |   +-- models.py             # Neural network architectures
 |
 +-- models/                   # Pretrained models
-|   +-- pretrained/           # Downloaded/trained model weights
+|   +-- pretrained/           # Downloaded/trained model weights (~87 MB)
 |       +-- brain_tumor_unet3d.pt
 |       +-- README.md
 |
-+-- data/                     # Data directory (created by notebooks)
-|   +-- brats_sample/         # BraTS sample data
-|   +-- README.md             # Data documentation
++-- data/                     # Data directory (download-on-demand; see data/README.md)
+|   +-- README.md             # Data documentation (v1.1-data subset ~900 MB)
 |
 +-- scripts/                  # Utility scripts
     +-- create_brats_subset.py
@@ -328,20 +329,18 @@ Wall time: 2h 3min 10s
 
 **File:** `notebooks/02_multimodal_integration.ipynb`
 
-Combines imaging-derived features with clinical data for patient outcome prediction and stratification:
+Combines imaging-derived features with clinical data for patient outcome prediction and stratification (Chapter §22.4):
 
 **Core Topics:**
 - Generating synthetic multimodal datasets with correlated clinical/imaging features
-- Understanding the rationale for multimodal integration and connection to Notebook 01
-- **Adaptive feature fusion**: Using learned modality weights (alpha for imaging, beta for clinical) to determine which data sources are most informative for each patient
-- Training dynamics interpretation (loss curves, accuracy, AUC)
-- **Patient Similarity Networks (PSN)**: Graph-based patient representation for precision medicine
-  - Hierarchical clustering to reveal patient subgroups in similarity matrices
-  - Threshold comparison visualizations showing network structure at different similarity cutoffs
-- **Community Detection**: Identifying unsupervised patient subgroups using the Louvain algorithm
-  - Modularity (Q) calculation and significance testing via permutation
-  - Clinical interpretation of discovered communities
-- Final evaluation on held-out test data with detailed metrics interpretation
+- **Adaptive feature fusion**: Learned modality weights α (imaging) and β (clinical)
+- Training with **modality dropout** so the model can shift weight when a modality is missing
+- **Missing-modality / ablation evaluation**: Accuracy and mean α/β with imaging or clinical zeroed
+- **Calibration & decision curve analysis (DCA)**: Reliability curve, ECE, net benefit vs treat-all/none
+- **Patient Similarity Networks (PSN)**: Cosine similarity graphs, threshold sweeps, hierarchical clustering
+- **Community Detection**: Louvain modularity and permutation significance testing
+- **Optional GNN section**: GCN on the PSN with semi-supervised label fractions (`uv sync --extra extras`)
+- Final held-out test metrics (accuracy, precision/recall, confusion matrix)
 
 **Learning Features:**
 - "How to read this plot" guidance for each visualization
@@ -349,32 +348,31 @@ Combines imaging-derived features with clinical data for patient outcome predict
 - Collapsible technical notes (e.g., Louvain algorithm details)
 - Limitations and caveats discussion
 
-**Runtime:** ~15-20 minutes
+**Runtime:** ~30–45 minutes (longer if you run the optional GNN cells)
 
 ### 3. AI-Assisted Computing with LLMs
 
 **File:** `notebooks/03_llm_assisted_computing.ipynb`
 
-Leverages large language models for medical research with evidence-based assessment of current capabilities:
+Leverages open-source Hugging Face models for medical research workflows (Chapter §22.5). No proprietary API keys required for the demos.
 
 **Core Topics:**
-- Understanding LLM capabilities and limitations in medical contexts (with 2025-2026 literature)
-- **Text summarization**: Condensing medical abstracts using BART-large-CNN
-- **Zero-shot classification**: Categorizing medical documents without task-specific training
-- **Named entity recognition**: Extracting conditions, treatments, and measurements
-- **Code generation assistance**: Templates for common medical data analysis tasks
-- **Question answering**: Extractive QA for literature mining
-- **Retrieval-Augmented Generation (RAG)**: Grounding responses in verified sources
-- Best practices and governance for clinical AI deployment
+- Evidence-based LLM maturity assessment (2025–2026 literature + prospective 2026 matrix)
+- **Summarization**: `facebook/bart-large-cnn` loaded directly (transformers v5 removed the `summarization` pipeline)
+- **Zero-shot classification**: `facebook/bart-large-mnli` via `pipeline("zero-shot-classification")`
+- **Biomedical NER**: `d4data/biomedical-ner-all` via `pipeline("token-classification")`
+- **Code generation**: `HuggingFaceTB/SmolLM2-360M-Instruct` drafts helpers; curated templates shown as post-review references
+- **Extractive QA**: DistilBERT/SQuAD via `AutoModelForQuestionAnswering` (v5 removed `question-answering` pipeline)
+- **RAG**: ChromaDB + `sentence-transformers` (`all-MiniLM-L6-v2`) retrieval; grounded answers from the same instruct model
+- **Hallucination mitigations**: RAG grounding, chain-of-thought prompting, output-variability demo
+- Best practices / governance for clinical AI (human-in-the-loop)
 
 **Learning Features:**
-- Evidence-based maturity assessments with literature citations
 - Connection to Notebooks 01 and 02 ("Three Pillars of Medical AI")
-- Prospective 2026 maturity matrix with supporting evidence
-- Clinical context and technical explanations for each NLP task
-- Expandable details for deeper technical understanding
+- Clinical context and expandable technical notes for each NLP task
+- First run downloads several HF models (cache often ~3–4 GB)
 
-**Runtime:** ~20-30 minutes
+**Runtime:** ~30–45 minutes (first run longer while models download)
 
 ## Chapter Compilation
 
@@ -418,6 +416,9 @@ latexmk -pdf main.tex
 | seaborn | Statistical visualization |
 | scipy | Hierarchical clustering, scientific computing |
 | chromadb | Vector database for RAG (Notebook 03) |
+| sentence-transformers | Embeddings for RAG retrieval (Notebook 03) |
+| accelerate | Efficient Hugging Face model loading (Notebook 03) |
+| torchinfo / torch-geometric | Optional Notebook 02 extras (`uv sync --extra extras`) |
 
 ## Citation
 

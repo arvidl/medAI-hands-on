@@ -279,7 +279,7 @@ def download_pretrained_model_github(models_dir: Path) -> Optional[Path]:
         Path to the downloaded model file, or None if download failed
         
     Note:
-        - Download size: ~8 MB
+        - Download size: ~87–90 MB (brain_tumor_unet3d.pt on release v1.1-data)
         - Model: UNet3D trained on BRATS_001-BRATS_100
     """
     import urllib.request

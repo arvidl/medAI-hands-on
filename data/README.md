@@ -54,9 +54,9 @@ data_dir = download_sample_data(dataset="brats_sample")  # Instant, ~5 samples
 
 ## Dataset Options
 
-### 1. Medical Segmentation Decathlon - Brain Tumor (Recommended)
+### 1. Medical Segmentation Decathlon - Brain Tumor (full dataset)
 
-**Best for**: Automated download, real clinical data, no registration required
+**Best for**: Local development with the complete cohort (484 training cases). For Colab or a quick start, prefer the GitHub subset above (`github_subset`, ~900 MB).
 
 | Property | Value |
 |----------|-------|
