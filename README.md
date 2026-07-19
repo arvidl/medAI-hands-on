@@ -43,10 +43,10 @@ Use this after pulling `main` to confirm Colab + release assets still work (~30�
 | Notebook | Smoke path | Pass if |
 |----------|------------|---------|
 | **01** Medical Imaging | Run setup (deps + repo clone) → `DATA_SOURCE = "github_subset"` download → load/plot one case → load pretrained U-Net (`USE_PRETRAINED = True`) → optional: hold-out test eval. Skip full training, MedSAM2, and §6.1 HD95 (`RUN_HD95=False`). | Clone succeeds (`src` importable); `brats_subset_100.zip` (~900 MB) from `v1.1-data`; volumes load; pretrained U-Net loads |
-| **02** Multimodal | Run setup (deps + repo clone) → fusion training (modality dropout + presence masks, early stopping) → §8.5 missing-modality → §8.6 calibration/DCA (+ interpretation markdown). Skip optional GNN unless you install extras. | Clone/`src` OK; training restores best val model; §8.5 shows α≈1 / β≈1 under single-modality presence masks; §8.6 prints ECE (often ~0.1) and shows calibration + DCA plots with the reading guide |
+| **02** Multimodal | Run setup (deps + repo clone; installs `networkx`, `torchinfo`, `python-louvain`, `torch-geometric`) → fusion training (modality dropout + presence masks, early stopping) → §8.5 missing-modality → §8.6 calibration/DCA (+ interpretation markdown) → optional GNN. | Clone/`src` OK; `torchinfo` model summary (not the basic fallback); training restores best val model; §8.5 shows α≈1 / β≈1 under single-modality presence masks; §8.6 prints ECE (often ~0.1) and shows calibration + DCA plots; GNN prints `HAS_TORCH_GEOMETRIC = True` |
 | **03** LLM | Run setup → summarization **or** NER → one SmolLM2 code-gen cell → RAG retrieve + answer (teaching corpus). | No `KeyError` on removed transformers v5 pipelines; models download from Hugging Face; RAG retrieves teaching docs with cosine similarity |
 
-**Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2 install/inference, Notebook 01 §6.1 HD95, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
+**Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2 install/inference, Notebook 01 §6.1 HD95, regenerating `chapter/figures`.
 
 ### Option 2: Local Installation
 
@@ -179,7 +179,9 @@ Expect `MedSAM2/checkpoints/MedSAM2_latest.pt`. The notebook looks for `./MedSAM
 
 #### Optional: Notebook 02 extras (`torchinfo`, PyTorch Geometric)
 
-Notebook 02’s fusion, PSN, missing-modality, calibration, and DCA sections run without these packages. To execute **all** cells — including the richer model summary and the GNN section that sets `HAS_TORCH_GEOMETRIC = True` — you need `torchinfo` and `torch-geometric`.
+**Google Colab:** the Notebook 02 setup cell installs `torchinfo`, `python-louvain`, and `torch-geometric` automatically (plus `networkx`).
+
+**Locally:** Notebook 02’s fusion, PSN, missing-modality, calibration, and DCA sections run without these packages. To execute **all** cells — including the richer model summary and the GNN section that sets `HAS_TORCH_GEOMETRIC = True` — you need `torchinfo` and `torch-geometric`.
 
 **uv:** these are *not* in the default `uv sync`; install the optional extras group:
 
