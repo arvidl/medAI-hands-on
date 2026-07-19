@@ -42,11 +42,11 @@ Use this after pulling `main` to confirm Colab + release assets still work (~30�
 
 | Notebook | Smoke path | Pass if |
 |----------|------------|---------|
-| **01** Medical Imaging | Run setup (deps + repo clone) → `DATA_SOURCE = "github_subset"` download → load/plot one case → load pretrained U-Net (`USE_PRETRAINED = True`) → optional: hold-out test eval. Skip full training & MedSAM2. | Clone succeeds (`src` importable); `brats_subset_100.zip` (~900 MB) from `v1.1-data`; volumes load; pretrained U-Net loads |
+| **01** Medical Imaging | Run setup (deps + repo clone) → `DATA_SOURCE = "github_subset"` download → load/plot one case → load pretrained U-Net (`USE_PRETRAINED = True`) → optional: hold-out test eval. Skip full training, MedSAM2, and §6.1 HD95 (`RUN_HD95=False`). | Clone succeeds (`src` importable); `brats_subset_100.zip` (~900 MB) from `v1.1-data`; volumes load; pretrained U-Net loads |
 | **02** Multimodal | Run through fusion training (with modality dropout) → §8.5 missing-modality → §8.6 calibration/DCA. Skip optional GNN unless you install extras. | Training finishes; α/β printed for ablation scenarios; calibration + DCA plots appear |
 | **03** LLM | Run setup → summarization **or** NER → one SmolLM2 code-gen cell → RAG retrieve + answer. | No `KeyError` on removed transformers v5 pipelines; models download from Hugging Face; RAG returns sources |
 
-**Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2 install/inference, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
+**Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2 install/inference, Notebook 01 §6.1 HD95, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
 
 ### Option 2: Local Installation
 
@@ -267,11 +267,12 @@ Demonstrates brain tumor segmentation using a 3D U-Net, with a promptable MedSAM
 - Hold-out evaluation: whole-tumor **and** per-class Dice, plus sensitivity / specificity
 - Radiological-orientation visualization
 - MedSAM2 promptable demo (§7): real per-slice inference if installed; otherwise a labeled simulation (not full 3D memory-attention propagation)
+- Optional §6.1 HD95 boundary metric on the test set (`RUN_HD95=False` by default)
 
 **Learning Features:**
 - Clinical interpretation guidelines for key plots
 - Review questions for self-assessment
-- Named extensions (nnU-Net, Hausdorff, TTA, full MedSAM2 3D, etc.) without implementing them all
+- Named extensions (nnU-Net, TTA, full MedSAM2 3D, etc.) without implementing them all
 
 **Runtime (recommended path):** ~30–45 min with `USE_PRETRAINED = True` and `DATA_SOURCE = "github_subset"`.
 
