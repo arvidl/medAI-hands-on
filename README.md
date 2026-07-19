@@ -36,6 +36,18 @@ Click the badge below to open the notebooks directly in Google Colab:
 > 2. Use `!git clone https://<TOKEN>@github.com/arvidl/medAI-hands-on.git` in Colab
 > 3. Or make the repository public for seamless Colab access
 
+#### Colab smoke-test checklist
+
+Use this after pulling `main` to confirm Colab + release assets still work (~30–60 min total). Prefer a **GPU** runtime.
+
+| Notebook | Smoke path | Pass if |
+|----------|------------|---------|
+| **01** Medical Imaging | Run setup → `DATA_SOURCE = "github_subset"` download → load/plot one case. Keep `USE_PRETRAINED = True`. Skip full training & MedSAM2. | `brats_subset_100.zip` (~900 MB) downloads from `v1.1-data`; volumes load; pretrained U-Net loads |
+| **02** Multimodal | Run through fusion training (with modality dropout) → §8.5 missing-modality → §8.6 calibration/DCA. Skip optional GNN unless you install extras. | Training finishes; α/β printed for ablation scenarios; calibration + DCA plots appear |
+| **03** LLM | Run setup → summarization **or** NER → one SmolLM2 code-gen cell → RAG retrieve + answer. | No `KeyError` on removed transformers v5 pipelines; models download from Hugging Face; RAG returns sources |
+
+**Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
+
 ### Option 2: Local Installation
 
 Choose **either** [uv](https://docs.astral.sh/uv/) (`pyproject.toml`) **or** conda (`environment.yml`). You do not need both.
