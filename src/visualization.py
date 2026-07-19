@@ -72,7 +72,8 @@ def plot_mri_modalities(
     slice_idx: Optional[int] = None,
     axis: int = 2,
     figsize: Tuple[int, int] = (16, 4),
-    save_path: Optional[Path] = None
+    save_path: Optional[Path] = None,
+    title: Optional[str] = None,
 ) -> plt.Figure:
     """
     Plot all MRI modalities side by side.
@@ -83,6 +84,7 @@ def plot_mri_modalities(
         axis: Slicing axis
         figsize: Figure size
         save_path: Optional path to save figure
+        title: Optional figure-level title (placed above subplots)
     
     Returns:
         matplotlib Figure object
@@ -103,7 +105,12 @@ def plot_mri_modalities(
         
         plot_mri_slice(volume, idx, axis, title=mod.upper(), ax=ax)
     
-    plt.tight_layout()
+    if title:
+        fig.suptitle(title, fontsize=14)
+        # Leave room above axes so the figure title is not clipped
+        fig.tight_layout(rect=[0, 0, 1, 0.90])
+    else:
+        fig.tight_layout()
     
     if save_path:
         plt.savefig(save_path, dpi=150, bbox_inches='tight')

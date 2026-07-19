@@ -136,6 +136,31 @@ conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
 python -c "import torch, monai, nibabel, transformers; from src import data_utils, models; print(torch.__version__, torch.cuda.is_available())"
 ```
 
+#### Optional: MedSAM2 (Notebook 01, Section 8)
+
+MedSAM2 is **not** required for the main BraTS U-Net tutorial. Without it, Notebook 01 still runs and shows a **simulated** promptable-segmentation demo. For **real** MedSAM2 inference:
+
+```bash
+cd medAI-hands-on   # repo root
+
+# Clone into the repo (gitignored — not committed)
+git clone https://github.com/bowang-lab/MedSAM2.git
+
+# Install into the same environment you use for the notebooks
+# uv:
+uv pip install -e ./MedSAM2
+# conda (after: conda activate medai-handson):
+# pip install -e ./MedSAM2
+
+# Download weights (~300 MB) into MedSAM2/checkpoints/
+cd MedSAM2 && bash download.sh && cd ..
+# Or from Hugging Face: wanglab/MedSAM2 → MedSAM2_latest.pt
+```
+
+Then **restart the Jupyter kernel**, re-run Notebook 01 through the MedSAM2 availability cell, and confirm you see `✓ MedSAM2 available`.
+
+Expect `MedSAM2/checkpoints/MedSAM2_latest.pt`. The notebook looks for `./MedSAM2` or `../MedSAM2` relative to the Jupyter working directory.
+
 ## Repository Structure
 
 ```
