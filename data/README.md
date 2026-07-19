@@ -120,7 +120,7 @@ data_dir = download_sample_data(dataset="brats_sample")  # 5 synthetic samples
 
 ### Default Behavior (Recommended) ⭐
 
-When running in Colab, the notebook automatically downloads the **100-case subset** from GitHub Releases:
+Notebook 01 first clones the repository (for `src/` imports), then downloads the **100-case subset** from GitHub Releases when `DATA_SOURCE = "github_subset"`:
 
 ```python
 # Automatic in Colab - downloads ~900 MB in a few minutes

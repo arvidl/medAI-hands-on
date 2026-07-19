@@ -20,7 +20,7 @@ The default weights are also published on the [`v1.1-data`](https://github.com/a
 - **Input**: 4-channel MRI in **Decathlon channel order** `(FLAIR, T1, T1ce, T2)`, shape `(4, 128, 128, 128)`
 - **Output**: 4-class segmentation (background, necrotic, edema, enhancing)
 - **Training**: Up to 100 epochs on the 100-case subset (early stopping; checkpoint epoch ≈ 71)
-- **Metric**: Whole-tumor Dice ≈ **0.82** (tumor vs background overlap on validation)
+- **Metric**: Whole-tumor Dice ≈ **0.82** on validation (tumor vs background). Notebook 01 also reports **per-class** Dice (necrotic / edema / enhancing) on the hold-out splits.
 
 ## Usage
 

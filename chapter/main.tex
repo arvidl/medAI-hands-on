@@ -270,7 +270,7 @@ While supervised approaches like U-Net require task-specific training, \textbf{f
 Rather than requiring full annotations, MedSAM2 uses \emph{bounding box or point prompts}: a clinician draws a box around the region of interest, and the model segments it, propagating across slices via memory attention.
 
 Foundation models complement supervised training: use MedSAM2 for rapid prototyping and rare pathologies, or to generate pseudo-labels for training task-specific models.
-We demonstrate both approaches in \notebook{01\_medical\_imaging.ipynb}.
+\textcolor{blue}{In \notebook{01\_medical\_imaging.ipynb}, we contrast the supervised U-Net with a promptable MedSAM2 workflow on BraTS slices (real model when installed; otherwise a clearly labeled simulation). Full 3D memory-attention volume propagation is left as an extension using MedSAM2's video predictor API.}
 
 %% ============================================================================
 \section{MULTIMODAL DATA INTEGRATION}
@@ -568,7 +568,7 @@ The field of medical AI continues to evolve rapidly. Several trends will shape i
 \begin{description}[style=nextline, leftmargin=1em, labelindent=0pt, itemsep=0.2ex]
 \item[Foundation models for medical imaging]
 Models like MedSAM2~\citep{ma2025medsam2}, trained on hundreds of thousands of 3D medical volumes, represent a paradigm shift from task-specific training.
-We demonstrated promptable segmentation in \notebook{01\_medical\_imaging.ipynb}, where a single bounding box prompt yields segmentation propagated across entire volumes.
+\textcolor{blue}{We demonstrated promptable segmentation in \notebook{01\_medical\_imaging.ipynb} (bounding-box prompts on MRI slices); extending this to automatic propagation across entire volumes via memory attention is a natural next step with MedSAM2's 3D/video predictor.}
 Future developments will extend this to multimodal foundation models integrating imaging, pathology, and clinical text, potentially enabling zero-shot diagnosis from minimal examples.
 
 \item[Graph-based learning at scale]

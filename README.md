@@ -29,12 +29,12 @@ Click the badge below to open the notebooks directly in Google Colab:
 
 **Colab Tips:**
 - Go to `Runtime > Change runtime type > GPU` for faster execution
-- The first cell in each notebook handles installation automatically
+- Notebook 01 clones this repository into `/content/medAI-hands-on` so `from src...` imports work (same helpers as local)
+- Other notebooks install their dependencies in the setup cells
 
-> **Note for Private Repositories:** If this repository is private, Colab's automatic cloning requires authentication. You may need to:
+> **Note for Private Repositories:** Notebook 01’s Colab setup runs `git clone https://github.com/arvidl/medAI-hands-on.git`. If the repository is private, that clone needs authentication:
 > 1. Generate a GitHub Personal Access Token with `repo` scope
-> 2. Use `!git clone https://<TOKEN>@github.com/arvidl/medAI-hands-on.git` in Colab
-> 3. Or make the repository public for seamless Colab access
+> 2. Use `!git clone https://<TOKEN>@github.com/arvidl/medAI-hands-on.git /content/medAI-hands-on` (or make the repo public)
 
 #### Colab smoke-test checklist
 
@@ -42,11 +42,11 @@ Use this after pulling `main` to confirm Colab + release assets still work (~30�
 
 | Notebook | Smoke path | Pass if |
 |----------|------------|---------|
-| **01** Medical Imaging | Run setup → `DATA_SOURCE = "github_subset"` download → load/plot one case. Keep `USE_PRETRAINED = True`. Skip full training & MedSAM2. | `brats_subset_100.zip` (~900 MB) downloads from `v1.1-data`; volumes load; pretrained U-Net loads |
+| **01** Medical Imaging | Run setup (deps + repo clone) → `DATA_SOURCE = "github_subset"` download → load/plot one case → load pretrained U-Net (`USE_PRETRAINED = True`) → optional: hold-out test eval. Skip full training & MedSAM2. | Clone succeeds (`src` importable); `brats_subset_100.zip` (~900 MB) from `v1.1-data`; volumes load; pretrained U-Net loads |
 | **02** Multimodal | Run through fusion training (with modality dropout) → §8.5 missing-modality → §8.6 calibration/DCA. Skip optional GNN unless you install extras. | Training finishes; α/β printed for ablation scenarios; calibration + DCA plots appear |
 | **03** LLM | Run setup → summarization **or** NER → one SmolLM2 code-gen cell → RAG retrieve + answer. | No `KeyError` on removed transformers v5 pipelines; models download from Hugging Face; RAG returns sources |
 
-**Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
+**Skip on Colab smoke tests:** full U-Net training, full Decathlon download, MedSAM2 install/inference, regenerating `chapter/figures`, Notebook 02 GNN (needs `torch-geometric`).
 
 ### Option 2: Local Installation
 
@@ -148,9 +148,11 @@ conda install pytorch torchvision pytorch-cuda=12.1 -c pytorch -c nvidia
 python -c "import torch, monai, nibabel, transformers; from src import data_utils, models; print(torch.__version__, torch.cuda.is_available())"
 ```
 
-#### Optional: MedSAM2 (Notebook 01, Section 8)
+#### Optional: MedSAM2 (Notebook 01, §7)
 
-MedSAM2 is **not** required for the main BraTS U-Net tutorial. Without it, Notebook 01 still runs and shows a **simulated** promptable-segmentation demo. For **real** MedSAM2 inference:
+MedSAM2 is **not** required for the main BraTS U-Net tutorial. Without it, Notebook 01 still runs and shows a **clearly labeled simulated** promptable-segmentation demo (GT mask perturbation — not real model output). The notebook demonstrates **per-slice** prompting when MedSAM2 is installed; full 3D memory-attention volume propagation is left as an extension (MedSAM2 video predictor API).
+
+For **real** MedSAM2 inference:
 
 ```bash
 cd medAI-hands-on   # repo root
@@ -256,85 +258,24 @@ medAI-hands-on/
 
 **File:** `notebooks/01_medical_imaging.ipynb`
 
-Demonstrates brain tumor segmentation using a 3D U-Net architecture with clinical context and didactic explanations:
+Demonstrates brain tumor segmentation using a 3D U-Net, with a promptable MedSAM2 workflow sketch for contrast:
 
 **Core Topics:**
-- Loading and visualizing multiparametric MRI data from BraTS (100 cases: 70 train / 15 validation / 15 test)
-- Understanding clinical motivation for automated brain tumor segmentation
-- Implementing a 3D U-Net CNN for volumetric segmentation
-- Training with Dice loss to handle class imbalance in medical imaging
-- Evaluating with medical imaging metrics (Dice score, sensitivity, specificity)
-- Hold-out test set evaluation for clinical translation
+- Loading and visualizing multiparametric MRI (BraTS / Decathlon subset: 100 cases, 70 / 15 / 15)
+- 3D U-Net for volumetric multi-class segmentation (background, necrotic, edema, enhancing)
+- Training with Dice loss for class imbalance (or load pretrained weights)
+- Hold-out evaluation: whole-tumor **and** per-class Dice, plus sensitivity / specificity
+- Radiological-orientation visualization
+- MedSAM2 promptable demo (§7): real per-slice inference if installed; otherwise a labeled simulation (not full 3D memory-attention propagation)
 
 **Learning Features:**
-- Clinical interpretation guidelines for each visualization
+- Clinical interpretation guidelines for key plots
 - Review questions for self-assessment
-- Suggestions for production improvements
+- Named extensions (nnU-Net, Hausdorff, TTA, full MedSAM2 3D, etc.) without implementing them all
 
-**Runtime:** Apple Silicon M4 Max (MPS) ~ 30 min with pretrained model; NVIDIA RTX A5000 Laptop GPU ~ 2 hr 30 min including model training
+**Runtime (recommended path):** ~30–45 min with `USE_PRETRAINED = True` and `DATA_SOURCE = "github_subset"`.
 
-<details>
-<summary>Training on Apple Silicon M4 Max: >> 8 hrs</summary>
-
-```bash
-============================================================
-TRAINING STARTED
-============================================================
-Epochs: 100 (with early stopping, patience=15)
-Training samples: 70
-Validation samples: 15
-Test samples (held out): 15
-------------------------------------------------------------
-Epoch   1/100 | Train Loss: 0.9519 | Val Loss: 0.9071 | Val Dice: 0.0329 | LR: 1.00e-03
-Epoch   5/100 | Train Loss: 0.5866 | Val Loss: 0.6539 | Val Dice: 0.0435 | LR: 1.00e-03
-Epoch  10/100 | Train Loss: 0.5675 | Val Loss: 0.6111 | Val Dice: 0.0414 | LR: 1.00e-03
-Epoch  15/100 | Train Loss: 0.5403 | Val Loss: 0.6262 | Val Dice: 0.0653 | LR: 1.00e-03
-Epoch  20/100 | Train Loss: 0.5294 | Val Loss: 0.6046 | Val Dice: 0.1262 | LR: 1.00e-03
-Epoch  25/100 | Train Loss: 0.3804 | Val Loss: 0.4250 | Val Dice: 0.8026 | LR: 1.00e-03
-Epoch  30/100 | Train Loss: 0.3578 | Val Loss: 0.4444 | Val Dice: 0.8055 | LR: 1.00e-03
-Epoch  35/100 | Train Loss: 0.3429 | Val Loss: 0.4194 | Val Dice: 0.8098 | LR: 5.00e-04
-Epoch  40/100 | Train Loss: 0.3285 | Val Loss: 0.4209 | Val Dice: 0.8024 | LR: 2.50e-04
-```
-
-</details>
-
-<details>
-<summary>Training on NVIDIA RTX A5000 Laptop GPU: ~2 hrs</summary>
-
-```bash
-============================================================
-TRAINING STARTED
-============================================================
-Epochs: 100 (with early stopping, patience=15)
-Training samples: 70
-Validation samples: 15
-Test samples (held out): 15
-------------------------------------------------------------
-Epoch   1/100 | Train Loss: 0.9515 | Val Loss: 0.8988 | Val Dice: 0.0348 | LR: 1.00e-03
-Epoch   5/100 | Train Loss: 0.5846 | Val Loss: 0.6584 | Val Dice: 0.0817 | LR: 1.00e-03
-Epoch  10/100 | Train Loss: 0.5632 | Val Loss: 0.6114 | Val Dice: 0.0769 | LR: 1.00e-03
-Epoch  15/100 | Train Loss: 0.5641 | Val Loss: 0.6162 | Val Dice: 0.0836 | LR: 1.00e-03
-Epoch  20/100 | Train Loss: 0.5299 | Val Loss: 0.6024 | Val Dice: 0.1236 | LR: 1.00e-03
-Epoch  25/100 | Train Loss: 0.3816 | Val Loss: 0.4260 | Val Dice: 0.8087 | LR: 1.00e-03
-Epoch  30/100 | Train Loss: 0.3597 | Val Loss: 0.4596 | Val Dice: 0.8103 | LR: 1.00e-03
-Epoch  35/100 | Train Loss: 0.3414 | Val Loss: 0.4137 | Val Dice: 0.8138 | LR: 5.00e-04
-Epoch  40/100 | Train Loss: 0.3267 | Val Loss: 0.4125 | Val Dice: 0.8109 | LR: 2.50e-04
-Epoch  45/100 | Train Loss: 0.3239 | Val Loss: 0.4137 | Val Dice: 0.8092 | LR: 2.50e-04
-Epoch  50/100 | Train Loss: 0.3186 | Val Loss: 0.4115 | Val Dice: 0.8070 | LR: 2.50e-04
-Epoch  55/100 | Train Loss: 0.3153 | Val Loss: 0.4123 | Val Dice: 0.8179 | LR: 2.50e-04
-Epoch  60/100 | Train Loss: 0.3110 | Val Loss: 0.4088 | Val Dice: 0.8108 | LR: 2.50e-04
-Epoch  65/100 | Train Loss: 0.3061 | Val Loss: 0.4038 | Val Dice: 0.8128 | LR: 2.50e-04
-Epoch  70/100 | Train Loss: 0.2958 | Val Loss: 0.4106 | Val Dice: 0.8134 | LR: 1.25e-04
-------------------------------------------------------------
-⚡ Early stopping triggered at epoch 71
-...
-  File size: ~87 MB  (models/pretrained/brain_tumor_unet3d.pt)
-============================================================
-CPU times: user 4h 13min 11s, sys: 16min 26s, total: 4h 29min 37s
-Wall time: 2h 3min 10s
-```
-
-</details>
+**Reference wall times** (train from scratch, early stopping ~epoch 70): RTX A5000 laptop GPU ~2 h; Apple Silicon M4 Max ≫ 8 h. Prefers the pretrained checkpoint for teaching runs.
 
 
 ### 2. Multimodal Data Integration
