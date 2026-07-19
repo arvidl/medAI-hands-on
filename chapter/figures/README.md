@@ -1,103 +1,40 @@
 # Chapter Figures
 
-This directory contains figures for the book chapter. The figures should be created as PDF or high-resolution PNG files.
+PDF figures used by `chapter/main.tex` (§§22.1–22.5). Filenames must match the `\includegraphics` paths in the chapter.
 
-## Required Figures
+## Figures
 
-### Figure 1: Chapter Workflow (`fig1_workflow.pdf`)
+| File | Section | Description |
+|------|---------|-------------|
+| `fig1_workflow.pdf` | Intro | Three domains → three notebooks |
+| `fig2_brain_mri.pdf` | 22.3 | Multiparametric MRI modalities (T1, T1-Gd, T2, FLAIR) |
+| `fig3_segmentation.pdf` | 22.3 | Ground truth vs U-Net predictions + Dice |
+| `fig4_multimodal.pdf` | 22.4 | Fusion architecture + patient similarity network |
+| `fig5_llm_pipeline.pdf` | 22.5 | LLM-assisted workflow with human validation |
 
-**Description:** Overview diagram showing the three domains covered in the chapter.
+## Regenerating figures
 
-**Content:**
-- Three connected boxes: "Medical Imaging" → "Multimodal Integration" → "AI-Assisted Computing"
-- Below each box: corresponding notebook names
-- Arrows showing data flow between components
-- Repository GitHub link at bottom
+Use `generate_figures.py` (writes into this directory when run via `main()`):
 
-**Suggested tools:** draw.io, Lucidchart, or TikZ
-
----
-
-### Figure 2: Brain MRI Modalities (`fig2_brain_mri.pdf`)
-
-**Description:** Four-panel figure showing different MRI modalities.
-
-**Content:**
-- Panel A: T1-weighted axial slice
-- Panel B: T1-weighted with contrast (T1ce)
-- Panel C: T2-weighted
-- Panel D: FLAIR
-- All showing same slice with visible tumor
-
-**Source:** Generate from notebook `01_medical_imaging.ipynb` or use BraTS dataset examples.
-
----
-
-### Figure 3: Segmentation Results (`fig3_segmentation.pdf`)
-
-**Description:** Comparison of ground truth vs. predicted segmentation.
-
-**Content:**
-- Row 1: Input MRI (FLAIR)
-- Row 2: Ground truth segmentation overlay
-- Row 3: Model prediction overlay
-- Include Dice scores in caption
-
-**Source:** Generate from notebook `01_medical_imaging.ipynb`
-
----
-
-### Figure 4: Multimodal Integration (`fig4_multimodal.pdf`)
-
-**Description:** Architecture diagram and patient similarity network.
-
-**Content:**
-- Left panel: Neural network architecture showing:
-  - Imaging encoder
-  - Clinical encoder
-  - Adaptive fusion
-  - Classification head
-- Right panel: Patient similarity network visualization
-  - Nodes colored by outcome
-  - Edge thickness by similarity
-
-**Source:** Generate from notebook `02_multimodal_integration.ipynb`
-
----
-
-### Figure 5: LLM Pipeline (`fig5_llm_pipeline.pdf`)
-
-**Description:** Workflow for LLM-assisted medical text analysis.
-
-**Content:**
-- Flow diagram: Documents → Preprocessing → LLM → Validation → Output
-- Include icons for each step
-- Note about human validation requirement
-
-**Suggested tools:** draw.io, Lucidchart, or manually in LaTeX with TikZ
-
----
-
-## Figure Specifications
-
-For CRC Press/Taylor & Francis:
-
-- **Format:** PDF preferred, PNG acceptable (300+ DPI)
-- **Width:** Single column: 3.5 inches, Full width: 7 inches
-- **Fonts:** Match document fonts where possible
-- **Colors:** Ensure readability in grayscale
-- **Labels:** Include panel labels (A, B, C, D) for multi-panel figures
-
-## Generating Figures from Notebooks
-
-Most figures can be generated programmatically:
-
-```python
-# In Jupyter notebook
-fig.savefig('../chapter/figures/fig2_brain_mri.pdf', 
-            dpi=300, bbox_inches='tight')
+```bash
+cd chapter/figures
+# From repo root with the project env:
+uv run python generate_figures.py
 ```
 
-## Placeholder Files
+**Requirements for real (non-placeholder) fig2/fig3:**
 
-Until final figures are created, the chapter uses placeholder boxes with descriptions in the LaTeX source.
+- Decathlon or extracted subset under `data/decathlon_brain/` or compatible BraTS paths used by the script
+- Pretrained weights: `models/pretrained/brain_tumor_unet3d.pt`
+- Packages from `pyproject.toml` / `environment.yml` (`nibabel`, `torch`, `matplotlib`, `networkx`, `scikit-learn`)
+
+Schematic figures (fig1, fig4 panel A, fig5) do not need imaging data. Fig4 panel B uses `src.data_utils.create_multimodal_dataset`.
+
+To regenerate **without overwriting** the committed PDFs, change into a temporary output directory and call the figure functions after importing the module (so `savefig` lands there), or copy the results afterward.
+
+## Specs (CRC Press / Taylor & Francis)
+
+- **Format:** PDF preferred (vector text); PNG at 300+ DPI acceptable
+- **Width:** Single column ~3.5 in, full width ~7 in
+- **Colors:** Readable in grayscale
+- **Labels:** Panel labels (A, B, …) for multi-panel figures

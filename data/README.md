@@ -7,9 +7,9 @@ This directory stores datasets used in the notebooks.
 | Dataset | Size | Tracked in Git? | Notes |
 |---------|------|-----------------|-------|
 | `README.md` | 5 KB | ✅ Yes | Documentation only |
-| `brats_subset_100.zip` | ~900 MB–3 GB | 📦 **GitHub Release** | Subset for Colab (100 cases) |
-| `brats_sample/` | ~21 MB | ⚠️ Optional | Small synthetic data for quick demos |
-| `decathlon_brain/` | **~14 GB** | ❌ **No** | Downloaded on-demand via notebook |
+| `brats_subset_100.zip` | ~900 MB | 📦 **GitHub Release** (`v1.1-data`) | Subset for Colab/local (100 cases) |
+| `brats_sample/` | ~21 MB | ❌ No (generated) | Small synthetic data for quick demos |
+| `decathlon_brain/` | **~7.5 GB** download / **~16 GB** extracted | ❌ **No** | Downloaded on-demand via notebook |
 | `BraTS*/` | Variable | ❌ No | Requires manual registration & download |
 
 **Large datasets are excluded via `.gitignore`** - they are downloaded automatically when running the notebooks.
@@ -120,17 +120,17 @@ data_dir = download_sample_data(dataset="brats_sample")  # 5 synthetic samples
 
 ### Default Behavior (Recommended) ⭐
 
-When running in Colab, the notebook automatically downloads the **50-case subset** from GitHub Releases:
+When running in Colab, the notebook automatically downloads the **100-case subset** from GitHub Releases:
 
 ```python
-# Automatic in Colab - downloads ~450 MB in 2-5 minutes
+# Automatic in Colab - downloads ~900 MB in a few minutes
 DATA_SOURCE = "github_subset"  # This is the default in Colab
 ```
 
 This provides:
-- Fast download (~450 MB vs 7.5 GB)
-- Real brain tumor MRI data
-- Same reproducible train/val/test splits
+- Fast download (~900 MB vs 7.5 GB for the full Decathlon task)
+- Real brain tumor MRI data (BRATS_001–BRATS_100)
+- Same reproducible train/val/test splits (70 / 15 / 15, SEED=42)
 
 ### Full Dataset in Colab
 
@@ -162,10 +162,10 @@ data/
 │
 ├── brats_subset/                       # GitHub Release subset (Colab default)
 │   └── Task01_BrainTumour/
-│       ├── imagesTr/                   # 50 training images (BRATS_001-050)
+│       ├── imagesTr/                   # 100 images (BRATS_001–BRATS_100)
 │       │   ├── BRATS_001.nii.gz        # 4-channel: FLAIR, T1, T1ce, T2
 │       │   └── ...
-│       └── labelsTr/                   # 50 training labels
+│       └── labelsTr/                   # 100 labels
 │           ├── BRATS_001.nii.gz        # Segmentation mask
 │           └── ...
 │

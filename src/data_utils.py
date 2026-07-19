@@ -161,7 +161,7 @@ def download_brats_subset_github(data_dir: Path) -> Path:
     Download the 100-sample BRATS subset from GitHub Releases.
     
     This provides the first 100 cases (BRATS_001-BRATS_100) from the full
-    Decathlon dataset but downloads only ~3 GB instead of ~7.5 GB.
+    Decathlon dataset but downloads only ~900 MB instead of ~7.5 GB.
     
     The subset is hosted as a GitHub Release asset for reliable access
     from Google Colab and other environments.
@@ -178,7 +178,7 @@ def download_brats_subset_github(data_dir: Path) -> Path:
         Path to the subset directory (contains imagesTr/ and labelsTr/)
         
     Note:
-        - Download size: ~3 GB
+        - Download size: ~900 MB (brats_subset_100.zip on release v1.1-data)
         - Cases: BRATS_001 through BRATS_100 (100 total)
         - Identical to first 100 cases from full Decathlon dataset
     """
@@ -207,7 +207,7 @@ def download_brats_subset_github(data_dir: Path) -> Path:
     print("DOWNLOADING BRATS SUBSET FROM GITHUB")
     print("=" * 60)
     print(f"Cases: BRATS_001 to BRATS_100 (100 cases)")
-    print(f"Size: ~3 GB (vs 7.5 GB for full Decathlon)")
+    print(f"Size: ~900 MB (vs 7.5 GB for full Decathlon)")
     print(f"Source: GitHub Release ({RELEASE_TAG})")
     print("=" * 60)
     

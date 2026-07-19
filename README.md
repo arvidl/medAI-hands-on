@@ -165,22 +165,22 @@ Expect `MedSAM2/checkpoints/MedSAM2_latest.pt`. The notebook looks for `./MedSAM
 
 #### Optional: Notebook 02 extras (`torchinfo`, PyTorch Geometric)
 
-Notebook 02’s core fusion + patient-similarity sections run without these packages. To execute **all** cells — including the richer model summary and the GNN section that sets `HAS_TORCH_GEOMETRIC = True` — install the `extras` optional dependency group:
+Notebook 02’s core fusion + patient-similarity sections run without these packages. To execute **all** cells — including the richer model summary and the GNN section that sets `HAS_TORCH_GEOMETRIC = True` — you need `torchinfo` and `torch-geometric`.
+
+**uv:** these are *not* in the default `uv sync`; install the optional extras group:
 
 ```bash
 cd medAI-hands-on
-
-# Recommended (updates .venv from pyproject.toml [project.optional-dependencies] extras)
 uv sync --extra extras
-
-# Equivalent one-off install into the existing .venv
-uv pip install torchinfo torch-geometric
+# or: uv pip install torchinfo torch-geometric
 ```
 
-With conda instead of uv (after `conda activate medai-handson`):
+**conda:** `environment.yml` already includes `torchinfo` and `torch-geometric`, so a fresh `conda env create -f environment.yml` has them. If you created the env before they were added:
 
 ```bash
-pip install torchinfo torch-geometric
+conda activate medai-handson
+conda env update -f environment.yml --prune
+# or: pip install torchinfo torch-geometric
 ```
 
 Then **restart the Jupyter kernel** and re-run Notebook 02. You should see:
@@ -188,7 +188,7 @@ Then **restart the Jupyter kernel** and re-run Notebook 02. You should see:
 - a `torchinfo` model summary (instead of the basic `print(model)` fallback)
 - `✓ PyTorch Geometric ... available` and `HAS_TORCH_GEOMETRIC = True`
 
-Verify:
+Verify (uv):
 
 ```bash
 uv run python -c "import torchinfo, torch_geometric; print(torchinfo.__version__, torch_geometric.__version__)"
@@ -315,7 +315,7 @@ Epoch  70/100 | Train Loss: 0.2958 | Val Loss: 0.4106 | Val Dice: 0.8134 | LR: 1
 ------------------------------------------------------------
 ⚡ Early stopping triggered at epoch 71
 ...
-  File size: 258.60 MB
+  File size: ~87 MB  (models/pretrained/brain_tumor_unet3d.pt)
 ============================================================
 CPU times: user 4h 13min 11s, sys: 16min 26s, total: 4h 29min 37s
 Wall time: 2h 3min 10s
