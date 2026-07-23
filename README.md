@@ -3,7 +3,7 @@
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on/blob/main/notebooks/01_medical_imaging.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This repository accompanies the book chapter *"Artificial Intelligence and Computational Medicine - A Hands-on Approach"* for the second edition of **Medical Applications of Artificial Intelligence** (CRC Press/Taylor & Francis, 2026).
+This repository accompanies the book chapter *"Artificial Intelligence and Computational Medicine - A Hands-on Approach"* for the second edition of **Medical Applications of Artificial Intelligence**, edited by Arvin Agah (CRC Press/Taylor & Francis, 2026).
 
 ## Overview
 
@@ -387,6 +387,7 @@ If you use this code in your research, please cite:
   title={Artificial Intelligence and Computational Medicine: A Hands-on Approach},
   author={Lundervold, Arvid},
   booktitle={Medical Applications of Artificial Intelligence},
+  editor={Agah, Arvin},
   edition={2nd},
   publisher={CRC Press/Taylor \& Francis},
   year={2026}
