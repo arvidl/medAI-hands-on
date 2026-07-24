@@ -270,7 +270,7 @@ While supervised approaches like U-Net require task-specific training, \textbf{f
 Rather than requiring full annotations, MedSAM2 uses \emph{bounding box or point prompts}: a clinician draws a box around the region of interest, and the model segments it, propagating across slices via memory attention.
 
 Foundation models complement supervised training: use MedSAM2 for rapid prototyping and rare pathologies, or to generate pseudo-labels for training task-specific models.
-\textcolor{blue}{In \notebook{01\_medical\_imaging.ipynb}, we contrast the supervised U-Net with a promptable MedSAM2 workflow on BraTS slices (real model when installed; otherwise a clearly labeled simulation). Full 3D memory-attention volume propagation is left as an extension using MedSAM2's video predictor API.}
+In \notebook{01\_medical\_imaging.ipynb}, we contrast the supervised U-Net with a promptable MedSAM2 workflow on BraTS slices (real model when installed; otherwise a clearly labeled simulation). Full 3D memory-attention volume propagation is left as an extension using MedSAM2's video predictor API.
 
 %% ============================================================================
 \section{MULTIMODAL DATA INTEGRATION}
@@ -344,7 +344,7 @@ Through stacked layers (each aggregating from immediate neighbors), information 
 A patient with unknown outcome can thus ``borrow'' information from similar patients with known outcomes, enabling \emph{semi-supervised learning}~\citep{kipf2017semi} where labeled and unlabeled patients jointly inform the model.
 
 This is particularly valuable in medical settings where labeled outcomes are scarce, but unlabeled patient data is abundant.
-\textcolor{blue}{In \notebook{02\_multimodal\_integration.ipynb}, we build a PSN on the same train/test node set used by the GCN and show that reasonable accuracy can be maintained even when only 50\% of training patients have labeled outcomes, illustrating label sharing through the similarity structure.}
+In \notebook{02\_multimodal\_integration.ipynb}, we build a PSN on the same train/test node set used by the GCN and show that reasonable accuracy can be maintained even when only 50\% of training patients have labeled outcomes, illustrating label sharing through the similarity structure.
 The approach extends naturally to heterogeneous graphs incorporating multiple relationship types (shared diagnoses, similar treatments, comparable biomarker profiles).
 
 \begin{figure}[H]
@@ -361,8 +361,8 @@ A practical challenge in multimodal integration is missing data~\citep{wu2026mis
 
 Our adaptive fusion architecture (Section~\ref{sec:multimodal}) supports masking during training and evaluation.
 Consider a patient with imaging data but missing clinical records.
-\textcolor{blue}{Zeroing $\mathbf{x}_{\text{clin}} = \mathbf{0}$ alone does not reliably drive the attention MLP to $\beta \approx 0$.
-In \notebook{02\_multimodal\_integration.ipynb} we therefore combine modality dropout with \emph{presence masks}: a missing modality is zeroed and its fusion weight is forced to zero (renormalizing the remaining weight), so $\mathbf{z}_{\text{fused}} \approx \alpha \cdot \mathbf{z}_{\text{img}}$ with $\alpha = 1$ when clinical data are unavailable.}
+Zeroing $\mathbf{x}_{\text{clin}} = \mathbf{0}$ alone does not reliably drive the attention MLP to $\beta \approx 0$.
+In \notebook{02\_multimodal\_integration.ipynb} we therefore combine modality dropout with \emph{presence masks}: a missing modality is zeroed and its fusion weight is forced to zero (renormalizing the remaining weight), so $\mathbf{z}_{\text{fused}} \approx \alpha \cdot \mathbf{z}_{\text{img}}$ with $\alpha = 1$ when clinical data are unavailable.
 For PSN construction, patients with missing modalities can still be included using available features, with similarity computed over the common feature space.
 
 \subsection{EVALUATION AND CLINICAL UTILITY}
@@ -398,9 +398,9 @@ Current LLM applications in medicine vary substantially in maturity and readines
 \midrule
 \textbf{Literature Review} & Operational Support & 85\% screening accuracy; 40\% time reduction in systematic reviews; emergence of PRISMA-trAIce reporting standards \\[1ex]
 \textbf{Code Assistance} & Ubiquitous & 84\% developer adoption globally; 74\% autonomous fix rate on verified benchmarks; shift to agentic coding workflows \\[1ex]
-\textbf{Report Drafting} & Advancing (supervised) & \textcolor{blue}{Ambient scribes and RL report frameworks (e.g., UniRG) target clinical hallucination reduction. Note: $>$1{,}000 FDA AI authorizations are mostly imaging \emph{devices}, not generative report writers.} \\[1ex]
+\textbf{Report Drafting} & Advancing (supervised) & Ambient scribes and RL report frameworks (e.g., UniRG) target clinical hallucination reduction. Note: $>$1{,}000 FDA AI authorizations are mostly imaging \emph{devices}, not generative report writers. \\[1ex]
 \textbf{Clinical Q\&A} & Deployed with Supervision & 75\% draft rate in major health systems; requires human-in-the-loop validation for patient-facing use \\[1ex]
-\textbf{Diagnostic Support} & Research / supervised use & \textcolor{blue}{Strong results on selected benchmarks (e.g., NEJM Image Challenge MCQs); not equivalent to unsupervised clinical diagnosis. Chain-of-thought agents are an active research direction.} \\
+\textbf{Diagnostic Support} & Research / supervised use & Strong results on selected benchmarks (e.g., NEJM Image Challenge MCQs); not equivalent to unsupervised clinical diagnosis. Chain-of-thought agents are an active research direction. \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -433,7 +433,7 @@ We demonstrate some of these capabilities in \notebook{03\_llm\_assisted\_comput
 A critical barrier to clinical LLM deployment has been hallucination, the generation of plausible but factually incorrect statements. Several mitigation strategies have emerged:
 
 \begin{description}[style=nextline, leftmargin=1em, labelindent=0pt, itemsep=0.2ex]
-\item[Retrieval-Augmented Generation (RAG)] Ground LLM responses in retrieved documents from verified sources (clinical guidelines, peer-reviewed literature), reducing reliance on parametric memory that may contain errors. \textcolor{blue}{We demonstrate the RAG mechanism in \notebook{03\_llm\_assisted\_computing.ipynb} with ChromaDB and sentence-transformer embeddings over a small teaching corpus; production deployments should index verified guidelines and peer-reviewed literature.}
+\item[Retrieval-Augmented Generation (RAG)] Ground LLM responses in retrieved documents from verified sources (clinical guidelines, peer-reviewed literature), reducing reliance on parametric memory that may contain errors. We demonstrate the RAG mechanism in \notebook{03\_llm\_assisted\_computing.ipynb} with ChromaDB and sentence-transformer embeddings over a small teaching corpus; production deployments should index verified guidelines and peer-reviewed literature.
 
 \item[Chain-of-Thought Reasoning] Prompting models to explicitly show reasoning steps enables verification of the logical path to conclusions and often improves accuracy on complex medical queries. Current frontier models incorporate this capability natively as ``extended thinking'' modes (e.g., GPT-5 with reasoning, Claude extended thinking, Gemini Deep Think), where the model performs deliberate multi-step reasoning before responding~\citep{wei2022chainofthought}. These reasoning models achieve substantially higher accuracy on complex analytical tasks by allocating additional inference-time computation.
 
@@ -568,7 +568,7 @@ The field of medical AI continues to evolve rapidly. Several trends will shape i
 \begin{description}[style=nextline, leftmargin=1em, labelindent=0pt, itemsep=0.2ex]
 \item[Foundation models for medical imaging]
 Models like MedSAM2~\citep{ma2025medsam2}, trained on hundreds of thousands of 3D medical volumes, represent a paradigm shift from task-specific training.
-\textcolor{blue}{We demonstrated promptable segmentation in \notebook{01\_medical\_imaging.ipynb} (bounding-box prompts on MRI slices); extending this to automatic propagation across entire volumes via memory attention is a natural next step with MedSAM2's 3D/video predictor.}
+We demonstrated promptable segmentation in \notebook{01\_medical\_imaging.ipynb} (bounding-box prompts on MRI slices); extending this to automatic propagation across entire volumes via memory attention is a natural next step with MedSAM2's 3D/video predictor.
 Future developments will extend this to multimodal foundation models integrating imaging, pathology, and clinical text, potentially enabling zero-shot diagnosis from minimal examples.
 
 \item[Graph-based learning at scale]
