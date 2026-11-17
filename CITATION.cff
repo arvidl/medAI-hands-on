@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use this software or notebooks, please cite Chapter 22 below."
+title: "Artificial Intelligence and Computational Medicine - A Hands-on Approach (Companion Repository)"
+type: software
+authors:
+  - family-names: "Lundervold"
+    given-names: "Arvid"
+    affiliation: "Department of Biomedicine, University of Bergen, Norway"
+version: "1.0.0"
+date-released: "2026-11-17"
+license: MIT
+repository-code: "https://github.com/arvidl/medAI-hands-on"
+url: "https://doi.org/10.1201/9781003727644-22"
+keywords:
+  - medical-imaging
+  - computational-medicine
+  - deep-learning
+  - multimodal-learning
+  - patient-similarity-networks
+  - large-language-models
+preferred-citation:
+  type: book
+  authors:
+    - family-names: "Lundervold"
+      given-names: "Arvid"
+      affiliation: "Department of Biomedicine, University of Bergen, Norway"
+  title: "Artificial Intelligence and Computational Medicine: A Hands-on Approach"
+  collection-title: "Medical Applications of Artificial Intelligence"
+  editors:
+    - family-names: "Agah"
+      given-names: "Arvin"
+  edition: "2nd"
+  section: "22"
+  publisher:
+    name: "CRC Press/Taylor & Francis"
+  year: 2026
+  isbn: "9781003727644"
+  doi: "10.1201/9781003727644-22"
+  url: "https://doi.org/10.1201/9781003727644-22"

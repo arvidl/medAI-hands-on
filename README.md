@@ -1,9 +1,11 @@
 # Artificial Intelligence and Computational Medicine - A Hands-on Approach
 
+[![DOI](https://img.shields.io/badge/DOI-10.1201%2F9781003727644--22-blue)](https://doi.org/10.1201/9781003727644-22)
+[![Release: v1.0.0](https://img.shields.io/badge/Release-v1.0.0-green)](https://github.com/arvidl/medAI-hands-on/releases/tag/v1.0.0)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/arvidl/medAI-hands-on/blob/main/notebooks/01_medical_imaging.ipynb)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This repository accompanies the book chapter *"[Artificial Intelligence and Computational Medicine](https://www.taylorfrancis.com/chapters/edit/10.1201/9781003727644-22/artificial-intelligence-computational-medicine-arvid-lundervold?context=ubx&refId=5a32162b-fd3d-4273-99c0-a0d77cb2723c) - A Hands-on Approach"* for the second edition of [**Medical Applications of Artificial Intelligence**](https://www.taylorfrancis.com/books/edit/10.1201/9781003727644/medical-applications-artificial-intelligence-arvin-agah), edited by Arvin Agah (CRC Press/Taylor & Francis, 2026).
+This repository accompanies **Chapter 22**, *"[Artificial Intelligence and Computational Medicine](https://doi.org/10.1201/9781003727644-22) - A Hands-on Approach"* ([Taylor & Francis](https://www.taylorfrancis.com/chapters/edit/10.1201/9781003727644-22/artificial-intelligence-computational-medicine-arvid-lundervold)), in the second edition of [**Medical Applications of Artificial Intelligence**](https://doi.org/10.1201/9781003727644) ([Taylor & Francis](https://www.taylorfrancis.com/books/edit/10.1201/9781003727644/medical-applications-artificial-intelligence-arvin-agah)), edited by Arvin Agah (CRC Press/Taylor & Francis, 2026).
 
 ## Overview
 
@@ -14,6 +16,11 @@ This chapter provides a hands-on introduction to applying AI methods in computat
 3. **AI-Assisted Computing**: Leveraging large language models for medical text analysis
 
 All examples are designed to be **reproducible** and can run both **locally** and on **Google Colab**.
+
+> **Publication Snapshot vs. Living Companion:**
+> - **Frozen book snapshot (`v1.0.0`)**: Tag [`v1.0.0`](https://github.com/arvidl/medAI-hands-on/releases/tag/v1.0.0) preserves the exact code, notebooks, and lockfile at book publication (`git checkout v1.0.0`).
+> - **Maintained branch (`main`)**: Tracked continuously for Google Colab, PyTorch/MONAI/Transformers, CUDA, and Apple Silicon runtime compatibility while keeping Notebooks 01–03 faithful to Chapter 22.
+> - **Data & pretrained weights (`v1.1-data`)**: Release [`v1.1-data`](https://github.com/arvidl/medAI-hands-on/releases/tag/v1.1-data) hosts the 100-case BraTS subset (~900 MB) and pretrained 3D U-Net checkpoint (~87 MB).
 
 ## Quick Start
 
@@ -31,10 +38,7 @@ Click the badge below to open the notebooks directly in Google Colab:
 - Go to `Runtime > Change runtime type > GPU` for faster execution
 - Notebooks 01 and 02 clone this repository into `/content/medAI-hands-on` so `from src...` imports work (same helpers as local)
 - Other notebooks install their dependencies in the setup cells
-
-> **Note for Private Repositories:** Notebooks 01–02 Colab setup runs `git clone https://github.com/arvidl/medAI-hands-on.git`. If the repository is private, that clone needs authentication:
-> 1. Generate a GitHub Personal Access Token with `repo` scope
-> 2. Use `!git clone https://<TOKEN>@github.com/arvidl/medAI-hands-on.git /content/medAI-hands-on` (or make the repo public)
+- For strict archival reproduction of the book-launch snapshot instead of `main`, replace `/blob/main/` with `/blob/v1.0.0/` in the Colab URL (locally: `git checkout v1.0.0`; in Colab setup: add `-b v1.0.0` to `git clone`)
 
 #### Colab smoke-test checklist
 
@@ -215,6 +219,7 @@ uv run python -c "import torchinfo, torch_geometric; print(torchinfo.__version__
 ```
 medAI-hands-on/
 +-- README.md                 # This file
++-- CITATION.cff              # Citation metadata (GitHub / Zenodo)
 +-- LICENSE                   # MIT License
 +-- pyproject.toml            # uv / pip project + dependencies
 +-- environment.yml           # Conda environment (name: medai-handson)
@@ -380,7 +385,7 @@ latexmk -pdf main.tex
 
 ## Citation
 
-If you use this code in your research, please cite:
+If you use this code or the notebooks in your research or teaching, please cite Chapter 22:
 
 ```bibtex
 @incollection{lundervold2026ai,
@@ -389,8 +394,12 @@ If you use this code in your research, please cite:
   booktitle={Medical Applications of Artificial Intelligence},
   editor={Agah, Arvin},
   edition={2nd},
+  chapter={22},
   publisher={CRC Press/Taylor \& Francis},
-  year={2026}
+  year={2026},
+  isbn={9781003727644},
+  doi={10.1201/9781003727644-22},
+  url={https://doi.org/10.1201/9781003727644-22}
 }
 ```
 
@@ -412,4 +421,4 @@ University of Bergen, Norway
 
 ---
 
-*This repository is under active development. Please report issues or suggestions via GitHub Issues.*
+*Companion repository for Chapter 22 of Medical Applications of Artificial Intelligence, 2nd ed. (CRC Press/Taylor & Francis, 2026). Tag [`v1.0.0`](https://github.com/arvidl/medAI-hands-on/releases/tag/v1.0.0) preserves the publication snapshot; `main` is maintained for ongoing runtime and Google Colab compatibility. Please report issues or suggestions via GitHub Issues.*
