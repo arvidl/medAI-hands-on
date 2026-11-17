@@ -7,7 +7,7 @@ This package provides common functionality for:
 - Model architectures
 """
 
-__version__ = "0.1.0"
+__version__ = "1.0.1"
 __author__ = "Arvid Lundervold"
 
 from . import data_utils
