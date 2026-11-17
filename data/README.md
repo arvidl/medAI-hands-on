@@ -18,12 +18,12 @@ This directory stores datasets used in the notebooks.
 
 ## Quick Start
 
-### Option 1: GitHub Subset (Recommended for Colab) ⭐
+### Option 1: GitHub Subset (Default for Colab & Local) ⭐
 
 The **100-case BRATS subset** is hosted as a GitHub Release for fast, reliable access:
 
 ```python
-# Automatic in Colab, or force with:
+# Default in Colab and local runs (unless full Decathlon is already extracted locally):
 DATA_SOURCE = "github_subset"  # Downloads ~900 MB from GitHub Release
 ```
 
@@ -160,7 +160,7 @@ base_data_dir = "/content/drive/MyDrive/medAI_data"
 data/
 ├── README.md                           # This file
 │
-├── brats_subset/                       # GitHub Release subset (Colab default)
+├── brats_subset/                       # GitHub Release subset (default)
 │   └── Task01_BrainTumour/
 │       ├── imagesTr/                   # 100 images (BRATS_001–BRATS_100)
 │       │   ├── BRATS_001.nii.gz        # 4-channel: FLAIR, T1, T1ce, T2
@@ -169,7 +169,7 @@ data/
 │           ├── BRATS_001.nii.gz        # Segmentation mask
 │           └── ...
 │
-├── decathlon_brain/                    # Full Decathlon (local default)
+├── decathlon_brain/                    # Full Decathlon (optional, 484 cases)
 │   └── Task01_BrainTumour/
 │       ├── dataset.json
 │       ├── imagesTr/                   # Training images (484 cases)
